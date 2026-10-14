@@ -1,15 +1,16 @@
 """The six co-clustering bases of Banerjee et al. (JMLR 2007), squared error.
+Names on the right: earlier work that used the same scheme.
 
 g = cluster of user u, h = cluster of item i. a = global mean, a_u / a_i =
 user / item mean, a_g / a_h = user / item cluster mean, a_gh = co-cluster mean,
 a_uh = mean of user u over item cluster h, a_gi = mean of item i over user cluster g.
 
     C1  a_g + a_h - a
-    C2  a_gh                                ||A - RR^T A CC^T||
+    C2  a_gh                                MSSRCC residue 1 (Cho et al. 2004), ||A - RR^T A CC^T||
     C3  a_gh + a_u - a_g
     C4  a_gh + a_i - a_h
     C5  a_gh + (a_u - a_g) + (a_i - a_h)    George & Merugu 2005
-    C6  a_uh + a_gi - a_gh                  MSSRCC, Cho et al. 2004
+    C6  a_uh + a_gi - a_gh                  MSSRCC residue 2 (Cho et al. 2004)
 
 Everything except the prediction rule is shared, so differences come from the
 basis. Empty averages fall back to the next coarser one.
