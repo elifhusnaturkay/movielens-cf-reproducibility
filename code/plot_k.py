@@ -4,8 +4,7 @@
 
 One plot per dataset. Blue = truncated SVD, orange = Funk SVD (Surprise's SVD).
 5-fold runs are drawn as mean with a band of +- 1 std; random 80/20 as a line.
-The grey dashed line is K = 5, the paper's choice. The black diamond is the
-paper's own SVD number for that dataset.
+The grey dashed line marks K = 5.
 """
 
 import collections
@@ -24,11 +23,10 @@ JSONL = os.path.join(OUT, "k_sweep.jsonl")
 BLUE, ORANGE = "#2a78d6", "#eb6834"
 INK, MUTED, GRID = "#0b0b0b", "#52514e", "#e4e3df"
 NAMES = {"tsvd": "Truncated SVD", "funk": "Funk SVD (Surprise)"}
-TITLES = {"mlsmall": "MovieLens latest small (paper Dataset 1)",
-          "ml100k": "MovieLens 100k ",
-          "ml20m": "MovieLens 20M (paper Dataset 2)"}
-# paper: Table 1 p. 13 (Dataset 1, 5-fold), Table 4 p. 18 (Dataset 2)
-PAPER = {"mlsmall": 0.8739, "ml20m": 0.91}   # p. 13 text: "0.8739 ... five-fold"
+TITLES = {"mlsmall": "MovieLens latest-small",
+          "ml100k": "MovieLens 100k",
+          "ml20m": "MovieLens 20M"}
+PAPER = {}   # optional reference values to mark on the K = 5 line
 
 
 def load():
@@ -88,7 +86,7 @@ def plot_dataset(dataset, runs):
                 label=f"paper SVD: {PAPER[dataset]}")
     lo, hi = ax.get_ylim()
     ax.set_ylim(lo - 0.08 * (hi - lo), hi)     # room for the bottom label
-    ax.text(k5 + 0.1, ax.get_ylim()[0], " paper K=5", va="bottom", fontsize=8, color=MUTED)
+    ax.text(k5 + 0.1, ax.get_ylim()[0], " K=5", va="bottom", fontsize=8, color=MUTED)
     ax.set_xticks(range(len(all_ks)))
     ax.set_xticklabels([str(k) for k in all_ks])
     ax.set_xlabel("K (number of factors)   K=0: no factors, baseline only", color=MUTED, fontsize=9)

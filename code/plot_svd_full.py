@@ -19,8 +19,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "..", "results")
 BLUE, ORANGE = "#2a78d6", "#eb6834"
 INK, MUTED, GRID = "#0b0b0b", "#52514e", "#e4e3df"
-TITLES = {"mlsmall": "Dataset 1 (ml-latest-small)", "ml100k": "MovieLens 100k",
-          "ml20m": "Dataset 2 (MovieLens 20M)"}
+TITLES = {"mlsmall": "MovieLens latest-small", "ml100k": "MovieLens 100k",
+          "ml20m": "MovieLens 20M"}
 PROTO = {"random": "random 80/20", "temporal": "temporal 80/20", "kfold": "5-fold CV",
          "loo_last": "leave-last-one-out", "loo_random": "leave-random-one-out"}
 DEFAULT = {"reg": 0.02, "n_epochs": 20, "lr": 0.005}
