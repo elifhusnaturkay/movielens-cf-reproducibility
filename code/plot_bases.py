@@ -25,8 +25,8 @@ INK, MUTED, GRID = "#0b0b0b", "#52514e", "#e4e3df"
 # all six bases: Banerjee et al. (2007); in brackets: earlier work that used the same scheme
 NAMES = {"C1": "C1", "C2": "C2 (MSSRCC residue 1, Cho et al. 2004)", "C3": "C3", "C4": "C4",
          "C5": "C5 (George & Merugu 2005)", "C6": "C6 (MSSRCC residue 2, Cho et al. 2004)"}
-TITLES = {"mlsmall": "Dataset 1 (ml-latest-small)", "ml100k": "MovieLens 100k",
-          "ml20m": "Dataset 2 (MovieLens 20M)"}
+TITLES = {"mlsmall": "MovieLens latest-small", "ml100k": "MovieLens 100k",
+          "ml20m": "MovieLens 20M"}
 PROTO = {"random": "random 80/20", "temporal": "temporal 80/20", "kfold": "5-fold CV",
          "loo_last": "leave-last-one-out", "loo_random": "leave-random-one-out"}
 

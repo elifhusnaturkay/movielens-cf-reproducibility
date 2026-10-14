@@ -1,21 +1,20 @@
-# Reproducing a 2025 recommender benchmark on MovieLens
+# Six co-clustering variants against SVD and KNN on MovieLens
 
-SVD, KNN and the six co-clustering bases of Banerjee et al. (2007), evaluated on three MovieLens datasets under five train/test protocols, with every test set fingerprinted.
+The six co-clustering bases of Banerjee et al. (2007), truncated SVD, Funk SVD and item-based KNN, evaluated on three MovieLens datasets under five train/test protocols, with every test set fingerprinted.
 
-![Reported vs. reproduced](results/figures/overview.png)
+![Six co-clustering bases](results/figures/overview.png)
 
-This repository re-runs the baselines of Khan et al. (2025), *A transformer-based architecture for collaborative filtering modeling in personalized recommender systems* (Scientific Reports 15, 24503), and extends the comparison to co-clustering. It contains all code, all raw results (more than 6,000 runs) and all figures.
+This repository contains all code, all raw results (more than 6,000 runs) and all figures of the study.
 
 **Author:** Elif Hüsna Turkay · Independent study supervised by Dr. Hyuk Cho, Department of Computer Science, Sam Houston State University
 
 ## Key findings
 
-- On **MovieLens latest-small**, the paper's SVD result reproduces exactly: RMSE 0.870 and MAE 0.667 (reported 0.87 and 0.67).
-- On **MovieLens 20M** it does not. Every protocol gives RMSE between 0.78 and 0.88; the paper reports 0.91.
-- The paper's **R² values contradict its own RMSE values**. On a fixed test set, R² = 1 − MSE / Var(y), so a higher RMSE must give a lower R². Our measured R² matches the value implied by the paper's RMSE.
-- The paper's "SVD" behaves like **Funk SVD** (Surprise `SVD`), not truncated SVD. K = 5 is not the best K on any dataset.
-- Among the six co-clustering bases, the winner depends on **training ratings per learned parameter**. MSSRCC (C6) is best on 20M at 2 × 2 and 3 × 3 and overfits on the small datasets (2.6 ratings per parameter on latest-small).
-- On the small datasets, an **item-based KNN** beats every SVD and co-clustering setup under random splits, but loses to Funk SVD on temporal splits.
+- The six co-clustering bases rank very differently on small and large data. C6 (MSSRCC residue 2, Cho et al. 2004), the basis with the most parameters, is the worst on MovieLens latest-small and 100k and the best on MovieLens 20M at 2 × 2 and 3 × 3.
+- The ranking follows **training ratings per learned parameter**: C6 has 2.6 per parameter on latest-small and 32 on 20M. Bases with fewer parameters can use much larger grids without overfitting.
+- With basis and grid size chosen together, co-clustering comes within 0.011 RMSE of a tuned Funk SVD on the small datasets, and 0.051 behind on 20M.
+- Funk SVD beats truncated SVD in all 60 comparisons (5 protocols × 3 datasets × 4 values of K). The best K grows with the data, from about 15 to 50–100.
+- On the small datasets an item-based KNN beats every SVD and co-clustering setup under random splits, but loses to Funk SVD when each user's newest ratings are held out.
 
 | | Best co-clustering | Best Funk SVD | Item-based KNN |
 |---|---|---|---|
@@ -27,20 +26,19 @@ This repository re-runs the baselines of Khan et al. (2025), *A transformer-base
 
 ## What we did
 
-1. **Matched the paper's data.** The paper uses MovieLens latest-small (Dataset 1) and MovieLens 20M (Dataset 2). We used both, with MovieLens 100k as a third dataset, and checked the rating, user and movie counts against the paper.
-2. **Fixed the splits.** The paper describes its split three different ways and gives no seed, so every model was run under five protocols: random 80/20, per-user temporal 80/20, 5-fold CV, leave-last-one-out and leave-random-one-out. All scripts take their split from one module and record a fingerprint of the test set, so any two numbers in this repository can be checked for being measured on the same ratings.
-3. **Re-ran the paper's baselines.** SVD (library defaults, as the paper gives no settings) and the Decision Tree with the paper's input features. We also wrote Funk SVD ourselves and confirmed that it matches the Surprise library to 1e-15.
-4. **Checked the paper's tables against themselves.** The paper reports both RMSE and R² for XGBoost, which fixes the variance of its test set. From that, the R² implied by every other RMSE in the table follows directly (`code/r2_check.py`).
-5. **Swept the number of factors.** Truncated SVD and Funk SVD for K = 0 to 100 on all three datasets, then both SVDs on all protocols and Funk SVD with different regularization, epochs and learning rates.
-6. **Compared six co-clustering bases.** All six bases of Banerjee et al. (2007) in one implementation, checked against their matrix forms, each on a 9 × 9 grid of user and item cluster counts from 1 to 50 (5-fold CV on the small datasets, K = L on 20M), and each basis at its best size on all protocols.
-7. **Added KNN.** The paper lists KNN as a baseline but does not describe it. We used an item-based KNN with a baseline estimator on the two small datasets.
+1. **Datasets.** MovieLens latest-small and MovieLens 20M, the two datasets of a recent MovieLens benchmark (Khan et al., 2025), and MovieLens 100k as a third.
+2. **One split module.** Every model is run under five protocols: random 80/20, per-user temporal 80/20, 5-fold CV, leave-last-one-out and leave-random-one-out. All scripts take their split from one module and record a fingerprint of the test set, so any two numbers in this repository can be checked for being measured on the same ratings.
+3. **Six co-clustering bases.** All six bases of Banerjee et al. (2007) in one implementation, checked against their matrix forms ‖A − RRᵀACCᵀ‖² (C2) and ‖(I − RRᵀ)A(I − CCᵀ)‖² (C6). Each basis on a 9 × 9 grid of user and item cluster counts from 1 to 50 (5-fold CV on the small datasets, K = L on 20M), then each basis at its best size on all protocols.
+4. **Two kinds of SVD.** Truncated SVD (SciPy `svds` on baseline residuals) and Funk SVD (our own implementation, identical to Surprise's `SVD` to 1e-15) for K = 0 to 100, on all protocols, plus Funk SVD with different regularization, epochs and learning rates.
+5. **KNN.** Surprise `KNNBaseline`, item based, pearson_baseline similarity, on the two small datasets.
+6. **A Decision Tree baseline** with label-encoded user and movie IDs plus genres, as a reference.
 
 ## Repository layout
 
 ```
 code/
   common_split.py    datasets, the five split protocols, test-set fingerprint
-  own_models.py      Funk SVD (matches surprise.SVD to 1e-15) and sparse co-clustering
+  own_models.py      Funk SVD (matches surprise.SVD) and sparse co-clustering
   bases.py           the six co-clustering bases C1..C6 in one class
   eval_protocols.py  one dataset x one model x one protocol -> results/eval.jsonl
   run_protocols.py   runs every model and protocol, prints the tables
@@ -48,7 +46,6 @@ code/
   svd_full.py        both SVDs on all protocols; Funk SVD hyperparameters
   run_bases.py       six bases: 3 x 3 on all protocols, K x L grid, best cells
   plot_k.py, plot_svd_full.py, plot_bases.py   figures and tables
-  r2_check.py        R2 implied by the paper's own RMSE values (no data needed)
 scripts/
   download_data.py   fetches the datasets from GroupLens
 results/
@@ -63,13 +60,13 @@ pip install -r requirements.txt
 python3 scripts/download_data.py          # add --20m for MovieLens 20M (about 190 MB)
 cd code
 
-python3 run_protocols.py mlsmall          # SVD, Decision Tree, KNN, co-clustering, 5 protocols (minutes)
+python3 run_bases.py protocols mlsmall    # six bases at 3 x 3, all protocols (minutes)
+python3 run_bases.py grid mlsmall kfold   # six bases x 81 sizes x 5 folds (about an hour)
 python3 k_sweep.py mlsmall tsvd kfold     # truncated SVD, K = 0..100 (seconds)
 python3 k_sweep.py mlsmall funk kfold     # Funk SVD, K = 0..100 (about a minute)
 python3 svd_full.py protocols mlsmall
-python3 run_bases.py protocols mlsmall    # six bases at 3 x 3
-python3 run_bases.py grid mlsmall kfold   # six bases x 81 sizes x 5 folds (about an hour)
-python3 plot_k.py && python3 plot_svd_full.py && python3 plot_bases.py
+python3 run_protocols.py mlsmall          # SVD, KNN, Decision Tree, 3 x 3 co-clustering
+python3 plot_bases.py && python3 plot_k.py && python3 plot_svd_full.py
 ```
 
 Replace `mlsmall` with `ml100k` or `ml20m` for the other datasets. Runs on 20M are slow (one 50 × 50 co-clustering run takes 10 to 30 minutes) and need about 6 GB of memory. Every script skips runs that are already in its results file, so a stopped job can be restarted.
@@ -84,24 +81,24 @@ Replace `mlsmall` with `ml100k` or `ml20m` for the other datasets. Runs on 20M a
 
 | | |
 |---|---|
+| ![Six bases, 20M](results/figures/bases_square_ml20m.png) | ![Train vs test](results/figures/bases_3x3.png) |
+| Six bases on MovieLens 20M, K = L | Six bases at 3 × 3, train and test RMSE |
 | ![K vs RMSE, latest-small](results/figures/k_rmse_mlsmall.png) | ![K vs RMSE, 20M](results/figures/k_rmse_ml20m.png) |
 | K against RMSE, latest-small (5-fold) | K against RMSE, 20M |
-| ![R² check](results/figures/r2_check.png) | ![Train vs test](results/figures/bases_3x3.png) |
-| Printed vs implied R² | Six bases at 3 × 3, train and test RMSE |
 
 ![Six bases, K x L grid](results/figures/bases_heat_mlsmall.png)
 
 ## Limitations
 
-The full 81-cell grid was not run on 20M (K = L only), KNN was not run on 20M because of memory, and "best configuration" values are selected on test results, so they are slightly optimistic for every model family. We did not re-implement the transformer model of the paper.
+The full 81-cell grid was not run on 20M (K = L only), KNN was not run on 20M because of memory, and "best configuration" values are selected on test results, so they are slightly optimistic for every model family.
 
 ## References
 
-- Khan, H. U., Naz, A., Alarfaj, F. K., Almusallam, N. (2025). A transformer-based architecture for collaborative filtering modeling in personalized recommender systems. *Scientific Reports* 15, 24503.
 - Banerjee, A., Dhillon, I., Ghosh, J., Merugu, S., Modha, D. S. (2007). A generalized maximum entropy approach to Bregman co-clustering and matrix approximation. *JMLR* 8.
 - Cho, H., Dhillon, I. S., Guan, Y., Sra, S. (2004). Minimum sum-squared residue co-clustering of gene expression data. *SIAM SDM*.
-- George, T., Merugu, S. (2005). A scalable collaborative filtering framework based on co-clustering. *IEEE ICDM*.
 - Ferrari Dacrema, M., Cremonesi, P., Jannach, D. (2019). Are we really making much progress? A worrying analysis of recent neural recommendation approaches. *ACM RecSys*.
+- George, T., Merugu, S. (2005). A scalable collaborative filtering framework based on co-clustering. *IEEE ICDM*.
+- Khan, H. U., Naz, A., Alarfaj, F. K., Almusallam, N. (2025). A transformer-based architecture for collaborative filtering modeling in personalized recommender systems. *Scientific Reports* 15, 24503.
 
 ## Acknowledgements
 
