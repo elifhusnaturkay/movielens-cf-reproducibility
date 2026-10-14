@@ -22,8 +22,9 @@ BASES = ["C1", "C2", "C3", "C4", "C5", "C6"]
 COLOR = dict(zip(BASES, ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300"]))
 MARK = dict(zip(BASES, ["o", "s", "^", "v", "D", "P"]))
 INK, MUTED, GRID = "#0b0b0b", "#52514e", "#e4e3df"
-NAMES = {"C1": "C1", "C2": "C2 (co-cluster mean)", "C3": "C3", "C4": "C4",
-         "C5": "C5 (George & Merugu 2005)", "C6": "C6 (MSSRCC, Cho et al. 2004)"}
+# all six bases: Banerjee et al. (2007); in brackets: earlier work that used the same scheme
+NAMES = {"C1": "C1", "C2": "C2 (MSSRCC residue 1, Cho et al. 2004)", "C3": "C3", "C4": "C4",
+         "C5": "C5 (George & Merugu 2005)", "C6": "C6 (MSSRCC residue 2, Cho et al. 2004)"}
 TITLES = {"mlsmall": "Dataset 1 (ml-latest-small)", "ml100k": "MovieLens 100k",
           "ml20m": "Dataset 2 (MovieLens 20M)"}
 PROTO = {"random": "random 80/20", "temporal": "temporal 80/20", "kfold": "5-fold CV",
@@ -101,7 +102,7 @@ def plot_3x3(rows):
         ax.set_xticks(range(6), BASES)
         ax.set_title(f"{TITLES[ds]}\n{PROTO[p]}", fontsize=9, color=INK, loc="left")
     axes[0].set_ylabel("RMSE (filled = test, hollow = train)", color=MUTED, fontsize=8)
-    fig.suptitle("Six co-clustering bases, 3 x 3, the gap is overfitting", fontsize=10,
+    fig.suptitle("Six co-clustering bases (Banerjee et al. 2007), 3 x 3, the gap is overfitting", fontsize=10,
                  color=INK, x=0.01, ha="left")
     fig.tight_layout()
     path = os.path.join(OUT, "figures", "bases_3x3.png")
@@ -133,7 +134,7 @@ def plot_square(rows, ds):
     p = rows[0]["protocol"] if rows else ""
     split = "5-fold CV mean" if any(r["dataset"] == ds and r["protocol"] == "kfold"
                                     for r in rows) else "random 80/20"
-    ax.set_title(f"{TITLES[ds]}, six bases, {split}", fontsize=10, color=INK, loc="left")
+    ax.set_title(f"{TITLES[ds]}, the six bases of Banerjee et al. (2007), {split}", fontsize=10, color=INK, loc="left")
     handles = [plt.Line2D([], [], color=COLOR[b], marker=MARK[b], linewidth=2, label=NAMES[b])
                for b in BASES]
     ax.legend(handles=handles, frameon=False, fontsize=7.5, loc="upper left")
@@ -168,8 +169,8 @@ def plot_heat(rows, ds):
         ax.set_xlabel("L (movie clusters)", fontsize=7, color=MUTED)
     for ax in axes[:, 0]:
         ax.set_ylabel("K (user clusters)", fontsize=7, color=MUTED)
-    fig.suptitle(f"{TITLES[ds]}: RMSE for every K x L, 5-fold mean, darker = better, "
-                 f"same color scale in all six", fontsize=10, color=INK, x=0.01, ha="left")
+    fig.suptitle(f"{TITLES[ds]}: six bases of Banerjee et al. (2007), RMSE for every K x L, "
+                 f"5-fold mean, darker = better", fontsize=10, color=INK, x=0.01, ha="left")
     fig.tight_layout()
     path = os.path.join(OUT, "figures", f"bases_heat_{ds}.png")
     fig.savefig(path)
