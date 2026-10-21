@@ -5,3 +5,4 @@ scikit-learn>=1.4
 scikit-surprise==1.1.5
 numba>=0.60
 matplotlib>=3.8
+xgboost>=2.0

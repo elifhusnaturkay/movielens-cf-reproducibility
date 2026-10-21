@@ -1,6 +1,6 @@
 # Six co-clustering variants against SVD and KNN on MovieLens
 
-The six co-clustering bases of Banerjee et al. (2007), truncated SVD, Funk SVD and item-based KNN, evaluated on three MovieLens datasets under five train/test protocols, with every test set fingerprinted.
+The six co-clustering bases of Banerjee et al. (2007), truncated SVD, Funk SVD and item-based KNN, evaluated on three MovieLens datasets under five train/test protocols, with every test set fingerprinted. On the two small datasets, also an SVR and the stacking of all these models.
 
 ![Six co-clustering bases](results/figures/overview.png)
 
@@ -15,12 +15,13 @@ This repository contains all code, all raw results (more than 6,000 runs) and al
 - With basis and grid size chosen together, co-clustering comes within 0.011 RMSE of a tuned Funk SVD on the small datasets, and 0.051 behind on 20M.
 - Funk SVD beats truncated SVD in all 60 comparisons (5 protocols × 3 datasets × 4 values of K). The best K grows with the data, from about 15 to 50–100.
 - On the small datasets an item-based KNN beats every SVD and co-clustering setup under random splits, but loses to Funk SVD when each user's newest ratings are held out.
+- **Combining the models works best.** Stacking Funk SVD, co-clustering, KNN and an SVR with an XGBoost meta model gives 0.814 on latest-small and 0.898 on ml-100k (5-fold), better than every single model in every split. Co-clustering gets a positive weight in the linear stacking, so it adds something the other models do not have.
 
-| | Best co-clustering | Best Funk SVD | Item-based KNN |
-|---|---|---|---|
-| latest-small (5-fold) | C3, 10 × 5: 0.885 | 0.875 | **0.853** |
-| ml-100k (5-fold) | C4, 50 × 2: 0.941 | 0.930 | **0.916** |
-| ml-20m (random 80/20) | C4, 50 × 50: 0.837 | **0.786** | not run |
+| | Best co-clustering | Best Funk SVD | Item-based KNN | SVR | Stacking (XGBoost) |
+|---|---|---|---|---|---|
+| latest-small (5-fold) | C3, 10 × 5: 0.885 | 0.875 | 0.853 | 0.845 | **0.814** |
+| ml-100k (5-fold) | C4, 50 × 2: 0.941 | 0.930 | 0.916 | 0.940 | **0.898** |
+| ml-20m (random 80/20) | C4, 50 × 50: 0.837 | **0.786** | not run | not run | not run |
 
 ![Summary](results/figures/summary.png)
 
@@ -32,6 +33,8 @@ This repository contains all code, all raw results (more than 6,000 runs) and al
 4. **Two kinds of SVD.** Truncated SVD (SciPy `svds` on baseline residuals) and Funk SVD (our own implementation, identical to Surprise's `SVD` to 1e-15) for K = 0 to 100, on all protocols, plus Funk SVD with different regularization, epochs and learning rates.
 5. **KNN.** Surprise `KNNBaseline`, item based, pearson_baseline similarity, on the two small datasets.
 6. **A Decision Tree baseline** with label-encoded user and movie IDs plus genres, as a reference.
+7. **SVR.** An RBF support vector regression (scikit-learn `SVR`, C = 0.3, ε = 0.3, chosen on a validation part of the latest-small train set) on 26–27 features made from the train ratings: user and movie means, counts and spreads, the movie's genres and the user's taste for these genres. The features of each training rating are computed from the other 4/5 of the train set, so a rating never appears in its own features. Random 80/20, temporal 80/20 and 5-fold CV on the two small datasets.
+8. **Stacking.** Funk SVD, the best co-clustering basis, KNN and SVR are combined by a meta model: a linear regression, and XGBoost on the four predictions plus the features. The meta model learns only from out-of-fold predictions (5 folds inside the train set), so it never sees a prediction made on a rating the base model was trained on. Same splits as the SVR.
 
 ## Repository layout
 
@@ -46,6 +49,10 @@ code/
   svd_full.py        both SVDs on all protocols; Funk SVD hyperparameters
   run_bases.py       six bases: 3 x 3 on all protocols, K x L grid, best cells
   plot_k.py, plot_svd_full.py, plot_bases.py   figures and tables
+  features.py        the SVR features, computed from train ratings only
+  base_preds.py      Funk SVD, co-clustering, KNN and SVR: out-of-fold and test predictions
+  stack.py           linear and XGBoost stacking on those predictions
+  plot_ensemble.py   figures and tables for SVR and stacking
 scripts/
   download_data.py   fetches the datasets from GroupLens
 results/
@@ -67,6 +74,11 @@ python3 k_sweep.py mlsmall funk kfold     # Funk SVD, K = 0..100 (about a minute
 python3 svd_full.py protocols mlsmall
 python3 run_protocols.py mlsmall          # SVD, KNN, Decision Tree, 3 x 3 co-clustering
 python3 plot_bases.py && python3 plot_k.py && python3 plot_svd_full.py
+
+python3 base_preds.py mlsmall random      # Funk SVD, co-clustering, KNN, SVR (about 10 minutes)
+python3 stack.py mlsmall random           # stacking (seconds)
+python3 base_preds.py mlsmall kfold 0     # the same for fold 0 of 5-fold CV; folds 0..4
+python3 plot_ensemble.py
 ```
 
 Replace `mlsmall` with `ml100k` or `ml20m` for the other datasets. Runs on 20M are slow (one 50 × 50 co-clustering run takes 10 to 30 minutes) and need about 6 GB of memory. Every script skips runs that are already in its results file, so a stopped job can be restarted.
@@ -75,7 +87,7 @@ Replace `mlsmall` with `ml100k` or `ml20m` for the other datasets. Runs on 20M a
 
 **Data versions.** The results use MovieLens latest-small as of September 2018 (100,836 ratings; `ratings.csv` md5 `325a6f09399d1c45671f187505e1a100`). GroupLens updates this dataset occasionally; `download_data.py` prints the md5 for comparison. The 20M results were produced with the Kaggle copy (`grouplens/movielens-20m-dataset`); the loader also reads the GroupLens zip.
 
-**Environment.** Python 3.13, NumPy 2.3.4, SciPy 1.17.1, pandas 3.0.3, scikit-learn 1.8.0, Surprise 1.1.5, numba 0.67.0, matplotlib 3.11.2. Seed 42 everywhere.
+**Environment.** Python 3.13, NumPy 2.3.4, SciPy 1.17.1, pandas 3.0.3, scikit-learn 1.8.0, Surprise 1.1.5, numba 0.67.0, matplotlib 3.11.2, XGBoost 3.4.1. Seed 42 everywhere.
 
 ## More figures
 
@@ -88,17 +100,26 @@ Replace `mlsmall` with `ml100k` or `ml20m` for the other datasets. Runs on 20M a
 
 ![Six bases, K x L grid](results/figures/bases_heat_mlsmall.png)
 
+| | |
+|---|---|
+| ![Best model of each step](results/figures/ensemble_chain.png) | ![SVR and stacking](results/figures/ensemble_models.png) |
+| Best single model, SVR and stacking (5-fold) | All models of the stacking step (5-fold) |
+
 ## Limitations
 
-The full 81-cell grid was not run on 20M (K = L only), KNN was not run on 20M because of memory, and "best configuration" values are selected on test results, so they are slightly optimistic for every model family.
+The full 81-cell grid was not run on 20M (K = L only), KNN, SVR and stacking were not run on 20M (KNN does not fit in memory with Surprise), the SVR and stacking settings were fixed by hand and not tuned, and "best configuration" values are selected on test results, so they are slightly optimistic for every model family.
 
 ## References
 
 - Banerjee, A., Dhillon, I., Ghosh, J., Merugu, S., Modha, D. S. (2007). A generalized maximum entropy approach to Bregman co-clustering and matrix approximation. *JMLR* 8.
+- Chen, T., Guestrin, C. (2016). XGBoost: A scalable tree boosting system. *ACM KDD*.
 - Cho, H., Dhillon, I. S., Guan, Y., Sra, S. (2004). Minimum sum-squared residue co-clustering of gene expression data. *SIAM SDM*.
+- Cortes, C., Vapnik, V. (1995). Support-vector networks. *Machine Learning* 20(3).
+- Drucker, H., Burges, C. J. C., Kaufman, L., Smola, A., Vapnik, V. (1997). Support vector regression machines. *NIPS* 9.
 - Ferrari Dacrema, M., Cremonesi, P., Jannach, D. (2019). Are we really making much progress? A worrying analysis of recent neural recommendation approaches. *ACM RecSys*.
 - George, T., Merugu, S. (2005). A scalable collaborative filtering framework based on co-clustering. *IEEE ICDM*.
 - Khan, H. U., Naz, A., Alarfaj, F. K., Almusallam, N. (2025). A transformer-based architecture for collaborative filtering modeling in personalized recommender systems. *Scientific Reports* 15, 24503.
+- Wolpert, D. H. (1992). Stacked generalization. *Neural Networks* 5(2).
 
 ## Acknowledgements
 
