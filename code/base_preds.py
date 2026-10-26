@@ -12,10 +12,15 @@ that the base model trained on.
 
 Base models:
   funk   Funk SVD, our own code (= surprise.SVD), library defaults
-  cc     best co-clustering basis of the dataset (C3 10x5 / C4 50x2)
+  cc     best co-clustering basis of the dataset (C3 10x5 / C4 50x2 / C4 50x50)
   knn    Surprise KNNBaseline, item based, pearson_baseline, k=40
+         (on 20M our own copy in own_knn.py, Surprise does not fit in memory)
   svr    RBF SVR on features.py, C=0.3, epsilon=0.3 (chosen on a validation
          part of the latest-small train set, not on the test set)
+         (on 20M a Nystroem approximation, see fit_svr_big)
+
+It also saves the features (out-of-fold for train rows, see oof_features),
+so stack.py, dl.py and the boosting models use exactly the same inputs.
 
 Output: ../results/preds/preds_<dataset>_<split>.npz and one line per model
 in ../results/ensemble.jsonl.
@@ -42,8 +47,9 @@ os.makedirs(PREDS, exist_ok=True)
 DATASETS = {
     "mlsmall": dict(load=cs.load_mlsmall, genres=ep.genres_mlsmall, scale=(0.5, 5)),
     "ml100k": dict(load=cs.load_ml100k_timed, genres=ep.genres_ml100k, scale=(1, 5)),
+    "ml20m": dict(load=cs.load_ml20m, genres=ep.genres_ml20m, scale=(0.5, 5), big=True),
 }
-BEST_CC = {"mlsmall": ("C3", 10, 5), "ml100k": ("C4", 50, 2)}
+BEST_CC = {"mlsmall": ("C3", 10, 5), "ml100k": ("C4", 50, 2), "ml20m": ("C4", 50, 50)}
 
 
 def get_split(raw, protocol, fold):
@@ -80,6 +86,10 @@ def fit_cc(train, test, ds, shape):
 
 
 def fit_knn(train, test, ds, shape):
+    if ds.get("big"):
+        # same predictions as Surprise (max difference 1.3e-15 on latest-small and 100k)
+        from own_knn import OwnKNN
+        return OwnKNN(rating_scale=ds["scale"], dtype=np.float32).fit(train).predict(test)
     from surprise import KNNBaseline
     trainset, testset = cs.to_surprise(train, test, rating_scale=ds["scale"])
     algo = KNNBaseline(k=40, sim_options={"name": "pearson_baseline", "user_based": False},
@@ -91,9 +101,32 @@ def fit_svr(train, test, ds, shape):
     from sklearn.preprocessing import StandardScaler
     from sklearn.svm import SVR
     Xtr, Xte = oof_features(train, test, ds, shape)
+    if ds.get("big"):
+        return fit_svr_big(train, Xtr, Xte, ds)
     sc = StandardScaler().fit(Xtr)
     model = SVR(C=0.3, epsilon=0.3, cache_size=2000).fit(sc.transform(Xtr), train[:, 2])
     return np.clip(model.predict(sc.transform(Xte)), *ds["scale"])
+
+
+def fit_svr_big(train, Xtr, Xte, ds):
+    """20M: an exact RBF SVR is not possible with 16 million ratings. The RBF
+    kernel is approximated with Nystroem (1000 components) and a linear SVR is
+    trained on a random sample of 500,000 train ratings. Same C, epsilon and
+    gamma as the exact SVR. On latest-small (all train ratings) this gives
+    0.8475, the exact SVR 0.8442."""
+    from sklearn.kernel_approximation import Nystroem
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.svm import LinearSVR
+    sc = StandardScaler().fit(Xtr)
+    pick = np.random.default_rng(42).choice(len(Xtr), min(500_000, len(Xtr)), replace=False)
+    A = sc.transform(Xtr[pick])
+    ny = Nystroem(gamma=1 / (A.shape[1] * A.var()), n_components=1000, random_state=42).fit(A)
+    model = LinearSVR(C=0.3, epsilon=0.3, random_state=42, max_iter=5000)
+    model.fit(ny.transform(A), train[pick, 2])
+    out = np.empty(len(Xte))
+    for s in range(0, len(Xte), 200_000):                # in parts, to save memory
+        out[s:s + 200_000] = model.predict(ny.transform(sc.transform(Xte[s:s + 200_000])))
+    return np.clip(out, *ds["scale"])
 
 
 MODELS = {"funk": fit_funk, "cc": fit_cc, "knn": fit_knn, "svr": fit_svr}
@@ -124,7 +157,8 @@ def main():
 
     Xtr, Xte = oof_features(train, test, ds, shape)
     saved = {"y_train": train[:, 2], "y_test": test[:, 2], "fingerprint": fp,
-             "X_train": Xtr, "X_test": Xte, "scale": np.array(ds["scale"])}
+             "X_train": Xtr, "X_test": Xte, "train": train[:, :3], "test": test[:, :3],
+             "shape": np.array(shape), "scale": np.array(ds["scale"])}
     for name, fit in MODELS.items():
         t = time.time()
         oof = np.zeros(len(train))

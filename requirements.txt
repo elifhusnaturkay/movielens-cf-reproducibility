@@ -6,3 +6,6 @@ scikit-surprise==1.1.5
 numba>=0.60
 matplotlib>=3.8
 xgboost>=2.0
+catboost>=1.2
+torch>=2.2
+transformers>=4.40

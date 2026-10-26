@@ -82,3 +82,79 @@
 {"dataset": "ml100k", "protocol": "kfold", "fold": 4, "model": "svr", "fingerprint": "83f1413e4316", "rmse": 0.9481183471375866, "mae": 0.7367939814629069, "seconds": 552.2}
 {"dataset": "ml100k", "protocol": "kfold", "fold": 4, "model": "stack_lr", "fingerprint": "83f1413e4316", "rmse": 0.9151402563662487, "mae": 0.7194505572898406, "seconds": 0.0}
 {"dataset": "ml100k", "protocol": "kfold", "fold": 4, "model": "stack_xgb", "fingerprint": "83f1413e4316", "rmse": 0.9069099360252401, "mae": 0.7111867231965066, "seconds": 1.0}
+{"dataset": "mlsmall", "protocol": "random", "fold": null, "model": "bag_rf", "inputs": "features", "fingerprint": "1f1d4736e82d", "rmse": 0.8342394180720425, "mae": 0.6386234535913626, "seconds": 7.4}
+{"dataset": "mlsmall", "protocol": "random", "fold": null, "model": "boost_ada", "inputs": "features", "fingerprint": "1f1d4736e82d", "rmse": 0.8758195520694246, "mae": 0.691744653964608, "seconds": 18.9}
+{"dataset": "mlsmall", "protocol": "random", "fold": null, "model": "boost_xgb", "inputs": "features", "fingerprint": "1f1d4736e82d", "rmse": 0.8360807655088605, "mae": 0.6384533941568433, "seconds": 1.0}
+{"dataset": "mlsmall", "protocol": "random", "fold": null, "model": "boost_cat", "inputs": "features", "fingerprint": "1f1d4736e82d", "rmse": 0.8345627470768762, "mae": 0.6359953075090544, "seconds": 2.3}
+{"dataset": "mlsmall", "protocol": "temporal", "fold": null, "model": "bag_rf", "inputs": "features", "fingerprint": "35f3d5fa32e7", "rmse": 0.8627527393851252, "mae": 0.6607416031374717, "seconds": 7.3}
+{"dataset": "mlsmall", "protocol": "temporal", "fold": null, "model": "boost_ada", "inputs": "features", "fingerprint": "35f3d5fa32e7", "rmse": 0.9014983399690857, "mae": 0.7125032853439325, "seconds": 18.8}
+{"dataset": "mlsmall", "protocol": "temporal", "fold": null, "model": "boost_xgb", "inputs": "features", "fingerprint": "35f3d5fa32e7", "rmse": 0.8607866152044577, "mae": 0.6587870492753947, "seconds": 0.9}
+{"dataset": "mlsmall", "protocol": "temporal", "fold": null, "model": "boost_cat", "inputs": "features", "fingerprint": "35f3d5fa32e7", "rmse": 0.8609638622046025, "mae": 0.6581305423597869, "seconds": 2.3}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 0, "model": "bag_rf", "inputs": "features", "fingerprint": "21f0c082ef31", "rmse": 0.8361757317095188, "mae": 0.6423785098054505, "seconds": 7.3}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 0, "model": "boost_ada", "inputs": "features", "fingerprint": "21f0c082ef31", "rmse": 0.8775536404098073, "mae": 0.6964056998739006, "seconds": 18.9}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 0, "model": "boost_xgb", "inputs": "features", "fingerprint": "21f0c082ef31", "rmse": 0.8355356483685579, "mae": 0.6413834833646047, "seconds": 0.9}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 0, "model": "boost_cat", "inputs": "features", "fingerprint": "21f0c082ef31", "rmse": 0.8346538339926902, "mae": 0.6398998110735008, "seconds": 2.3}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 1, "model": "bag_rf", "inputs": "features", "fingerprint": "f1a3f778655a", "rmse": 0.8312173242942834, "mae": 0.6363172774560971, "seconds": 7.4}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 1, "model": "boost_ada", "inputs": "features", "fingerprint": "f1a3f778655a", "rmse": 0.8747910045611385, "mae": 0.6907296174911771, "seconds": 18.9}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 1, "model": "boost_xgb", "inputs": "features", "fingerprint": "f1a3f778655a", "rmse": 0.8327356424318935, "mae": 0.6359895212930368, "seconds": 0.9}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 1, "model": "boost_cat", "inputs": "features", "fingerprint": "f1a3f778655a", "rmse": 0.8291024567995605, "mae": 0.6327710994052341, "seconds": 2.3}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 2, "model": "bag_rf", "inputs": "features", "fingerprint": "fe1e5d4629b4", "rmse": 0.8390781838510012, "mae": 0.639278045990801, "seconds": 8.2}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 2, "model": "boost_ada", "inputs": "features", "fingerprint": "fe1e5d4629b4", "rmse": 0.8755590225364732, "mae": 0.6894932297968273, "seconds": 20.2}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 2, "model": "boost_xgb", "inputs": "features", "fingerprint": "fe1e5d4629b4", "rmse": 0.8386244398816955, "mae": 0.6394661275243502, "seconds": 0.9}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 2, "model": "boost_cat", "inputs": "features", "fingerprint": "fe1e5d4629b4", "rmse": 0.8380136616028495, "mae": 0.638210374516418, "seconds": 2.3}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 3, "model": "bag_rf", "inputs": "features", "fingerprint": "ecb488debe4e", "rmse": 0.8437344796551934, "mae": 0.647473575476166, "seconds": 7.8}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 3, "model": "boost_ada", "inputs": "features", "fingerprint": "ecb488debe4e", "rmse": 0.8838324580975481, "mae": 0.6985367398782099, "seconds": 18.9}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 3, "model": "boost_xgb", "inputs": "features", "fingerprint": "ecb488debe4e", "rmse": 0.8447573284945468, "mae": 0.6475282859990219, "seconds": 0.9}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 3, "model": "boost_cat", "inputs": "features", "fingerprint": "ecb488debe4e", "rmse": 0.8429638801065865, "mae": 0.6454372777278361, "seconds": 2.4}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 4, "model": "bag_rf", "inputs": "features", "fingerprint": "18b56fcc23ca", "rmse": 0.8351564318589848, "mae": 0.638897991825017, "seconds": 8.2}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 4, "model": "boost_ada", "inputs": "features", "fingerprint": "18b56fcc23ca", "rmse": 0.8745465010167534, "mae": 0.6913058498948373, "seconds": 18.9}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 4, "model": "boost_xgb", "inputs": "features", "fingerprint": "18b56fcc23ca", "rmse": 0.8346213024256389, "mae": 0.6382181305053504, "seconds": 0.9}
+{"dataset": "mlsmall", "protocol": "kfold", "fold": 4, "model": "boost_cat", "inputs": "features", "fingerprint": "18b56fcc23ca", "rmse": 0.8348034445177739, "mae": 0.6372550807477986, "seconds": 2.4}
+{"dataset": "ml100k", "protocol": "random", "fold": null, "model": "bag_rf", "inputs": "features", "fingerprint": "83f1413e4316", "rmse": 0.9439809406249948, "mae": 0.7442868656183, "seconds": 8.3}
+{"dataset": "ml100k", "protocol": "random", "fold": null, "model": "boost_ada", "inputs": "features", "fingerprint": "83f1413e4316", "rmse": 0.971197721606887, "mae": 0.7860557792669347, "seconds": 18.9}
+{"dataset": "ml100k", "protocol": "random", "fold": null, "model": "boost_xgb", "inputs": "features", "fingerprint": "83f1413e4316", "rmse": 0.9402620459045202, "mae": 0.7400542193710804, "seconds": 0.9}
+{"dataset": "ml100k", "protocol": "random", "fold": null, "model": "boost_cat", "inputs": "features", "fingerprint": "83f1413e4316", "rmse": 0.9372479767871081, "mae": 0.7368698245951271, "seconds": 2.3}
+{"dataset": "ml100k", "protocol": "temporal", "fold": null, "model": "bag_rf", "inputs": "features", "fingerprint": "20d393512ba3", "rmse": 0.9825259439967098, "mae": 0.7814294580287371, "seconds": 8.0}
+{"dataset": "ml100k", "protocol": "temporal", "fold": null, "model": "boost_ada", "inputs": "features", "fingerprint": "20d393512ba3", "rmse": 1.0063920706014111, "mae": 0.8156765360095927, "seconds": 18.6}
+{"dataset": "ml100k", "protocol": "temporal", "fold": null, "model": "boost_xgb", "inputs": "features", "fingerprint": "20d393512ba3", "rmse": 0.9815424105678544, "mae": 0.7769069686077988, "seconds": 0.9}
+{"dataset": "ml100k", "protocol": "temporal", "fold": null, "model": "boost_cat", "inputs": "features", "fingerprint": "20d393512ba3", "rmse": 0.9792263679319324, "mae": 0.775470480901764, "seconds": 2.3}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 0, "model": "bag_rf", "inputs": "features", "fingerprint": "3853c40bc9fc", "rmse": 0.9303812069018713, "mae": 0.7353652532657123, "seconds": 8.0}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 0, "model": "boost_ada", "inputs": "features", "fingerprint": "3853c40bc9fc", "rmse": 0.9620873548753608, "mae": 0.7802137376941637, "seconds": 18.8}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 0, "model": "boost_xgb", "inputs": "features", "fingerprint": "3853c40bc9fc", "rmse": 0.9305836815242035, "mae": 0.7329921325325965, "seconds": 0.9}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 0, "model": "boost_cat", "inputs": "features", "fingerprint": "3853c40bc9fc", "rmse": 0.9288962397998634, "mae": 0.7313312980124803, "seconds": 2.3}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 1, "model": "bag_rf", "inputs": "features", "fingerprint": "970cdb26f775", "rmse": 0.926599392276256, "mae": 0.729695491558267, "seconds": 7.8}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 1, "model": "boost_ada", "inputs": "features", "fingerprint": "970cdb26f775", "rmse": 0.9569880272207824, "mae": 0.7739204558485426, "seconds": 18.9}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 1, "model": "boost_xgb", "inputs": "features", "fingerprint": "970cdb26f775", "rmse": 0.9240282450047306, "mae": 0.7272770897746086, "seconds": 0.9}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 1, "model": "boost_cat", "inputs": "features", "fingerprint": "970cdb26f775", "rmse": 0.9203315771093995, "mae": 0.7233972671929448, "seconds": 2.3}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 2, "model": "bag_rf", "inputs": "features", "fingerprint": "e3c1e47e4409", "rmse": 0.9320226148481979, "mae": 0.7374412996191787, "seconds": 8.0}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 2, "model": "boost_ada", "inputs": "features", "fingerprint": "e3c1e47e4409", "rmse": 0.9621024314030955, "mae": 0.7797558254560227, "seconds": 18.9}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 2, "model": "boost_xgb", "inputs": "features", "fingerprint": "e3c1e47e4409", "rmse": 0.9299143486528517, "mae": 0.7345554603993892, "seconds": 0.9}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 2, "model": "boost_cat", "inputs": "features", "fingerprint": "e3c1e47e4409", "rmse": 0.9280556210701132, "mae": 0.732627074566199, "seconds": 2.3}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 3, "model": "bag_rf", "inputs": "features", "fingerprint": "2712bb4931b3", "rmse": 0.9349315383398541, "mae": 0.7402798855451606, "seconds": 8.0}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 3, "model": "boost_ada", "inputs": "features", "fingerprint": "2712bb4931b3", "rmse": 0.9636016988786739, "mae": 0.7825627926970664, "seconds": 18.8}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 3, "model": "boost_xgb", "inputs": "features", "fingerprint": "2712bb4931b3", "rmse": 0.9341991649427097, "mae": 0.7380453649878502, "seconds": 0.9}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 3, "model": "boost_cat", "inputs": "features", "fingerprint": "2712bb4931b3", "rmse": 0.9319161222734079, "mae": 0.736187705574442, "seconds": 2.3}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 4, "model": "bag_rf", "inputs": "features", "fingerprint": "83f1413e4316", "rmse": 0.94233744597831, "mae": 0.7425901029561128, "seconds": 8.0}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 4, "model": "boost_ada", "inputs": "features", "fingerprint": "83f1413e4316", "rmse": 0.9693601336466874, "mae": 0.7827242852164085, "seconds": 18.8}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 4, "model": "boost_xgb", "inputs": "features", "fingerprint": "83f1413e4316", "rmse": 0.9400361812053422, "mae": 0.7393144600749015, "seconds": 1.0}
+{"dataset": "ml100k", "protocol": "kfold", "fold": 4, "model": "boost_cat", "inputs": "features", "fingerprint": "83f1413e4316", "rmse": 0.9364167076872592, "mae": 0.735457741089292, "seconds": 2.3}
+{"dataset": "ml20m", "protocol": "random", "fold": null, "model": "funk", "fingerprint": "9372caa7a99e", "rmse": 0.785840445086804, "mae": 0.5979846177026475, "seconds": 272.7}
+{"dataset": "ml20m", "protocol": "random", "fold": null, "model": "cc", "fingerprint": "9372caa7a99e", "rmse": 0.8366696385782887, "mae": 0.6408740636724545, "seconds": 4148.8}
+{"dataset": "ml20m", "protocol": "random", "fold": null, "model": "knn", "fingerprint": "9372caa7a99e", "rmse": 0.7852475401857841, "mae": 0.5952428489488021, "seconds": 199.3}
+{"dataset": "ml20m", "protocol": "random", "fold": null, "model": "svr", "fingerprint": "9372caa7a99e", "rmse": 0.8564773261006171, "mae": 0.6472681019971359, "seconds": 571.0}
+{"dataset": "ml20m", "protocol": "random", "fold": null, "model": "stack_lr", "inputs": "preds", "fingerprint": "9372caa7a99e", "rmse": 0.775203834460865, "mae": 0.5894423827587635, "seconds": 1.0}
+{"dataset": "ml20m", "protocol": "random", "fold": null, "model": "stack_xgb", "inputs": "preds+features", "fingerprint": "9372caa7a99e", "rmse": 0.7687887214248134, "mae": 0.5844605027891363, "seconds": 176.9}
+{"dataset": "ml20m", "protocol": "random", "fold": null, "model": "bag_rf", "inputs": "features", "fingerprint": "9372caa7a99e", "rmse": 0.8446958818242553, "mae": 0.6464094713200353, "seconds": 498.8}
+{"dataset": "ml20m", "protocol": "random", "fold": null, "model": "boost_ada", "inputs": "features", "fingerprint": "9372caa7a99e", "rmse": 0.893665489391077, "mae": 0.7107680902959483, "seconds": 825.8}
+{"dataset": "ml20m", "protocol": "random", "fold": null, "model": "boost_xgb", "inputs": "features", "fingerprint": "9372caa7a99e", "rmse": 0.8438032800666186, "mae": 0.6453141028238264, "seconds": 155.4}
+{"dataset": "ml20m", "protocol": "random", "fold": null, "model": "boost_cat", "inputs": "features", "fingerprint": "9372caa7a99e", "rmse": 0.8440621383028648, "mae": 0.6454431983003903, "seconds": 358.9}
+{"dataset": "ml20m", "protocol": "temporal", "fold": null, "model": "funk", "fingerprint": "f268574c0507", "rmse": 0.797122759061004, "mae": 0.6043516730720532, "seconds": 231.3}
+{"dataset": "ml20m", "protocol": "temporal", "fold": null, "model": "cc", "fingerprint": "f268574c0507", "rmse": 0.8481409336906167, "mae": 0.6457487531632716, "seconds": 4655.3}
+{"dataset": "ml20m", "protocol": "temporal", "fold": null, "model": "knn", "fingerprint": "f268574c0507", "rmse": 0.8058158560563473, "mae": 0.6069117192573951, "seconds": 125.9}
+{"dataset": "ml20m", "protocol": "temporal", "fold": null, "model": "svr", "fingerprint": "f268574c0507", "rmse": 0.8675505717420057, "mae": 0.6531991588382309, "seconds": 542.1}
+{"dataset": "ml20m", "protocol": "temporal", "fold": null, "model": "stack_lr", "inputs": "preds", "fingerprint": "f268574c0507", "rmse": 0.7925618943261744, "mae": 0.5987955217465244, "seconds": 0.8}
+{"dataset": "ml20m", "protocol": "temporal", "fold": null, "model": "stack_xgb", "inputs": "preds+features", "fingerprint": "f268574c0507", "rmse": 0.7874854246205469, "mae": 0.5952431433384101, "seconds": 115.5}
+{"dataset": "ml20m", "protocol": "temporal", "fold": null, "model": "bag_rf", "inputs": "features", "fingerprint": "f268574c0507", "rmse": 0.8534745884862048, "mae": 0.6493076040490658, "seconds": 350.9}
+{"dataset": "ml20m", "protocol": "temporal", "fold": null, "model": "boost_ada", "inputs": "features", "fingerprint": "f268574c0507", "rmse": 0.8881432048777206, "mae": 0.7009578451438389, "seconds": 774.3}
+{"dataset": "ml20m", "protocol": "temporal", "fold": null, "model": "boost_xgb", "inputs": "features", "fingerprint": "f268574c0507", "rmse": 0.8532824187737317, "mae": 0.6489267648275981, "seconds": 107.0}
+{"dataset": "ml20m", "protocol": "temporal", "fold": null, "model": "boost_cat", "inputs": "features", "fingerprint": "f268574c0507", "rmse": 0.8535177522718526, "mae": 0.6490890653043038, "seconds": 304.4}
