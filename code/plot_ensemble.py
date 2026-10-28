@@ -2,11 +2,11 @@
 
     python3 plot_ensemble.py
 
-Reads ../results/ensemble.jsonl, deep.jsonl and transformer.jsonl. Writes
+Reads ../results/ensemble.jsonl, deep.jsonl, rnn.jsonl and transformer.jsonl. Writes
 results/figures/ensemble_chain.png, ensemble_models.png,
 ensemble_temporal.png and ensemble_ml20m.png and prints the markdown tables.
 
-For the transformers, the 3 seeds of one fold are averaged first, so every
+For GRU, LSTM and the transformers, the 3 seeds of one fold are averaged first, so every
 model has one number per fold, like the other models.
 """
 
@@ -42,6 +42,8 @@ MODELS = [  # (key, name, step)
     ("ncf", "NCF", "Deep learning"),
     ("mlp", "MLP", "Deep learning"),
     ("hybrid", "NCF + MLP (hybrid)", "Deep learning"),
+    ("gru", "GRU", "Deep learning"),
+    ("lstm", "LSTM", "Deep learning"),
     ("bst", "Transformer, own (BST style)", "Transformer"),
     ("bert", "Transformer, HF BertModel", "Transformer"),
 ]
@@ -54,11 +56,15 @@ def load():
     rows = []
     for name in ("ensemble", "deep"):
         rows += [json.loads(l) for l in open(os.path.join(RESULTS, name + ".jsonl"))]
-    # transformer: mean over the seeds, one row per (dataset, split, fold, model)
+    # rnn and transformer: mean over the seeds, one row per (dataset, split, fold, model)
     by = collections.defaultdict(list)
-    for l in open(os.path.join(RESULTS, "transformer.jsonl")):
-        r = json.loads(l)
-        by[(r["dataset"], r["protocol"], r["fold"], r["model"])].append(r)
+    for name in ("rnn", "transformer"):
+        path = os.path.join(RESULTS, name + ".jsonl")
+        if not os.path.exists(path):
+            continue
+        for l in open(path):
+            r = json.loads(l)
+            by[(r["dataset"], r["protocol"], r["fold"], r["model"])].append(r)
     for (ds, p, f, m), rs in by.items():
         rows.append(dict(dataset=ds, protocol=p, fold=f, model=m,
                          rmse=float(np.mean([r["rmse"] for r in rs])),

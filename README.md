@@ -1,6 +1,6 @@
 # Six co-clustering variants against SVD and KNN on MovieLens
 
-The six co-clustering bases of Banerjee et al. (2007), truncated SVD, Funk SVD and item-based KNN, evaluated on three MovieLens datasets under five train/test protocols, with every test set fingerprinted. On the same splits we also ran an SVR, ensembles (stacking, bagging, boosting), deep learning (NCF, MLP) and two small transformers.
+The six co-clustering bases of Banerjee et al. (2007), truncated SVD, Funk SVD and item-based KNN, evaluated on three MovieLens datasets under five train/test protocols, with every test set fingerprinted. On the same splits we also ran an SVR (and its fast versions), ensembles (stacking, bagging, boosting), deep learning (NCF, MLP, GRU, LSTM) and two small transformers.
 
 ![Six co-clustering bases](results/figures/overview.png)
 
@@ -19,12 +19,15 @@ This repository contains all code, all raw results (more than 6,000 runs) and al
 - **Deep learning and transformers do not beat stacking.** The best network (NCF + MLP) is 0.027, 0.014 and 0.024 behind stacking on the three datasets. Our two small transformers are close to KNN on latest-small and worse than KNN on ml-100k and 20M. On the temporal splits they are worse than Funk SVD, even though they use the order of the ratings.
 - The SVR beats the traditional models only on latest-small. On 20M we could only run an approximation of it (Nystroem, 500,000 ratings), and there it is worse than every traditional model. Random Forest, XGBoost and CatBoost on the same features are about as good as the SVR. AdaBoost is the weakest ensemble.
 - Temporal splits are harder for every model, but the ranking of the models stays almost the same.
+- **The usual RBF SVR is slow, and a kernel approximation fixes this.** Nystroem with 1,000 components and a linear SVR trains 30 to 35 times faster on the small datasets (about 3 s against 90 to 98 s) and is only 0.003 to 0.005 worse in RMSE. Prediction goes from about 38 s to under 1 s. Nystroem is better than random Fourier features (RBF Sampler) with the same number of components.
+- **The rating scale does not explain why KNN beats the SVR on ml-100k.** When we round latest-small to whole stars like ml-100k, the SVR still beats KNN on every split, by about the same margin.
+- GRU and LSTM over each user's last 20 ratings are about as good as the NCF + MLP network on latest-small and worse on ml-100k. On the temporal splits the rating order did not help them.
 
 | | Best co-clustering | Best Funk SVD | Item-based KNN | SVR | Stacking (XGBoost) | Best deep learning | Best transformer |
 |---|---|---|---|---|---|---|---|
 | latest-small (5-fold) | C3, 10 × 5: 0.885 | 0.875 | 0.853 | 0.845 | **0.814** | NCF + MLP: 0.841 | HF BERT: 0.849 |
 | ml-100k (5-fold) | C4, 50 × 2: 0.941 | 0.930 | 0.916 | 0.940 | **0.898** | NCF + MLP: 0.911 | HF BERT: 0.941 |
-| ml-20m (random 80/20) | C4, 50 × 50: 0.837 | 0.786 | 0.785 | 0.857 | **0.769** | NCF + MLP: 0.793 | own: 0.803 |
+| ml-20m (random 80/20) | C4, 50 × 50: 0.837 | 0.786 | 0.785 | 0.856 | **0.769** | NCF + MLP: 0.793 | own: 0.803 |
 
 ![Best model of each step](results/figures/ensemble_chain.png)
 
@@ -41,8 +44,10 @@ This repository contains all code, all raw results (more than 6,000 runs) and al
 7. **SVR.** An RBF support vector regression (scikit-learn `SVR`, C = 0.3, ε = 0.3, chosen on a validation part of the latest-small train set) on 26–27 features made from the train ratings: user and movie means, counts and spreads, the movie's genres and the user's taste for these genres. The features of each training rating are computed from the other 4/5 of the train set, so a rating never appears in its own features. Random 80/20, temporal 80/20 and 5-fold CV on the two small datasets. On 20M the exact RBF SVR is too slow. There we approximate the RBF kernel with Nystroem (1,000 components) and train a linear SVR on 500,000 random train ratings, with the same C, ε and γ. On latest-small this approximation gives 0.8475 and the exact SVR 0.8442.
 8. **Stacking.** Funk SVD, the best co-clustering basis, KNN and SVR are combined by a meta model: a linear regression, and XGBoost on the four predictions plus the features. The meta model learns only from out-of-fold predictions (5 folds inside the train set), so it never sees a prediction made on a rating the base model was trained on. Same splits as the SVR, plus random and temporal 80/20 on 20M.
 9. **Bagging and boosting.** Random Forest, AdaBoost, XGBoost and CatBoost on the same features as the SVR (not on the predictions). On 20M each Random Forest tree sees 800,000 ratings and AdaBoost a random 2 million, else they take too long.
-10. **Deep learning.** NCF (He et al., 2017) with user and movie embeddings, an MLP on the SVR features, and a hybrid of both, in PyTorch. Adam, early stopping on 10% of the train set, seed 42.
+10. **Deep learning.** NCF (He et al., 2017) with user and movie embeddings, an MLP on the SVR features, and a hybrid of both, in PyTorch. Adam, early stopping on 10% of the train set, seed 42. Then GRU and LSTM (2 layers, 64 units) over the user's last 20 train ratings, with the same input as the transformers below, 3 seeds.
 11. **Transformers.** For each rating, the input is the user's last 20 train ratings before it and the target movie with a masked rating. This goes through a small encoder (2 layers, 4 heads, d = 64), and the output of the target token plus a user embedding gives the rating. We tried two encoders of the same size: our own in plain PyTorch (BST style, Chen et al., 2019) and a Hugging Face `BertModel` (random start). A test rating only sees train ratings with an earlier time, and the code checks this. 3 seeds on the small datasets, 1 seed on 20M.
+12. **Fast SVR.** The usual RBF SVR against `LinearSVR`, `RBFSampler` + `LinearSVR` and `Nystroem` + `LinearSVR` (100, 300, 1,000 and 3,000 components), with the same features, C, ε and γ. RMSE on all splits of the two small datasets. Training and prediction time on the random split, on one core, the median of three runs with nothing else running.
+13. **Rating scale.** Latest-small rounded to whole stars (half up: 0.5 → 1, 1.5 → 2, ...) after the split, then Funk SVD, KNN and the SVR again, to see if the scale explains the different results on latest-small and ml-100k.
 
 ## Repository layout
 
@@ -63,6 +68,10 @@ code/
   stack.py           stacking on those predictions, bagging and boosting on the features
   dl.py              NCF, MLP and hybrid, on the same splits and features
   bst.py             the two transformers (own encoder and Hugging Face BertModel)
+  rnn.py             GRU and LSTM, the same input as bst.py
+  svr_speed.py       the usual SVR against LinearSVR, RBFSampler and Nystroem
+  plot_svr_speed.py  figure and tables for svr_speed.py
+  quantize.py        latest-small rounded to whole stars, Funk SVD, KNN and SVR again
   plot_ensemble.py   figures and tables for SVR, ensembles, deep learning and transformers
 scripts/
   download_data.py   fetches the datasets from GroupLens
@@ -91,6 +100,9 @@ python3 stack.py mlsmall random           # stacking, bagging, boosting (minutes
 python3 dl.py mlsmall random              # NCF, MLP, hybrid (minutes)
 python3 bst.py mlsmall random bst 42      # own transformer, seed 42 ("bert" for the HF encoder)
 python3 bst.py mlsmall kfold 0 bert 42    # 5-fold CV: give the fold (0..4) before the model
+python3 rnn.py mlsmall random gru 42      # GRU (or lstm), same arguments as bst.py
+python3 svr_speed.py mlsmall random       # fast SVR versions (needs base_preds.py first)
+python3 quantize.py random                # latest-small with whole stars
 python3 base_preds.py mlsmall kfold 0     # base_preds, stack and dl take the fold the same way
 python3 plot_ensemble.py
 ```
@@ -123,30 +135,38 @@ Replace `mlsmall` with `ml100k` or `ml20m` for the other datasets. Runs on 20M a
 
 ![All models on 20M](results/figures/ensemble_ml20m.png)
 
+![Fast SVR](results/figures/svr_speed.png)
+
 ## Limitations
 
-The full 81-cell grid was not run on 20M (K = L only). On 20M the steps after the single models were run on random and temporal 80/20 only, with one seed, and the HF BERT transformer on temporal 80/20 was not run. The settings of the SVR, the ensembles, the networks and the transformers were fixed by hand and not tuned. Deep learning uses one seed, small networks and at most 40 epochs. The "best configuration" values of the single-model study are selected on test results, so they are slightly optimistic for every model family.
+The full 81-cell grid was not run on 20M (K = L only). On 20M the steps after the single models were run on random and temporal 80/20 only, with one seed, and the HF BERT transformer on temporal 80/20 was not run. GRU and LSTM on 20M are not in this version yet. The settings of the SVR, the ensembles, the networks and the transformers were fixed by hand and not tuned. Deep learning uses one seed, small networks and at most 40 epochs. The "best configuration" values of the single-model study are selected on test results, so they are slightly optimistic for every model family.
 
 ## References
 
 - Banerjee, A., Dhillon, I., Ghosh, J., Merugu, S., Modha, D. S. (2007). A generalized maximum entropy approach to Bregman co-clustering and matrix approximation. *JMLR* 8.
 - Breiman, L. (2001). Random forests. *Machine Learning* 45(1).
+- Chang, C.-C., Lin, C.-J. (2011). LIBSVM: A library for support vector machines. *ACM TIST* 2(3).
 - Chen, Q., Zhao, H., Li, W., Huang, P., Ou, W. (2019). Behavior sequence transformer for e-commerce recommendation in Alibaba. *DLP-KDD Workshop*.
 - Chen, T., Guestrin, C. (2016). XGBoost: A scalable tree boosting system. *ACM KDD*.
 - Cho, H., Dhillon, I. S., Guan, Y., Sra, S. (2004). Minimum sum-squared residue co-clustering of gene expression data. *SIAM SDM*.
+- Cho, K., van Merriënboer, B., Gulcehre, C., Bahdanau, D., Bougares, F., Schwenk, H., Bengio, Y. (2014). Learning phrase representations using RNN encoder-decoder for statistical machine translation. *EMNLP*.
 - Cortes, C., Vapnik, V. (1995). Support-vector networks. *Machine Learning* 20(3).
 - Devlin, J., Chang, M.-W., Lee, K., Toutanova, K. (2019). BERT: Pre-training of deep bidirectional transformers for language understanding. *NAACL-HLT*.
 - Drucker, H. (1997). Improving regressors using boosting techniques. *ICML*.
 - Drucker, H., Burges, C. J. C., Kaufman, L., Smola, A., Vapnik, V. (1997). Support vector regression machines. *NIPS* 9.
+- Fan, R.-E., Chang, K.-W., Hsieh, C.-J., Wang, X.-R., Lin, C.-J. (2008). LIBLINEAR: A library for large linear classification. *JMLR* 9.
 - Ferrari Dacrema, M., Cremonesi, P., Jannach, D. (2019). Are we really making much progress? A worrying analysis of recent neural recommendation approaches. *ACM RecSys*.
 - Freund, Y., Schapire, R. E. (1997). A decision-theoretic generalization of on-line learning and an application to boosting. *Journal of Computer and System Sciences* 55(1).
 - George, T., Merugu, S. (2005). A scalable collaborative filtering framework based on co-clustering. *IEEE ICDM*.
 - He, X., Liao, L., Zhang, H., Nie, L., Hu, X., Chua, T.-S. (2017). Neural collaborative filtering. *WWW*.
+- Hochreiter, S., Schmidhuber, J. (1997). Long short-term memory. *Neural Computation* 9(8).
 - Khan, H. U., Naz, A., Alarfaj, F. K., Almusallam, N. (2025). A transformer-based architecture for collaborative filtering modeling in personalized recommender systems. *Scientific Reports* 15, 24503.
 - Prokhorenkova, L., Gusev, G., Vorobev, A., Dorogush, A. V., Gulin, A. (2018). CatBoost: Unbiased boosting with categorical features. *NeurIPS*.
+- Rahimi, A., Recht, B. (2007). Random features for large-scale kernel machines. *NIPS* 20.
 - Williams, C. K. I., Seeger, M. (2001). Using the Nyström method to speed up kernel machines. *NIPS* 13.
 - Wolf, T., et al. (2020). Transformers: State-of-the-art natural language processing. *EMNLP: System Demonstrations*.
 - Wolpert, D. H. (1992). Stacked generalization. *Neural Networks* 5(2).
+- Yang, T., Li, Y.-F., Mahdavi, M., Jin, R., Zhou, Z.-H. (2012). Nyström method vs random Fourier features: A theoretical and empirical comparison. *NIPS* 25.
 
 ## Acknowledgements
 
