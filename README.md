@@ -1,27 +1,14 @@
-# Six co-clustering variants against SVD and KNN on MovieLens
+# From co-clustering to transformers on MovieLens
 
-The six co-clustering bases of Banerjee et al. (2007), truncated SVD, Funk SVD and item-based KNN, evaluated on three MovieLens datasets under five train/test protocols, with every test set fingerprinted. On the same splits we also ran an SVR (and its fast versions), ensembles (stacking, bagging, boosting), deep learning (NCF, MLP, GRU, LSTM) and two small transformers.
+The six co-clustering bases of Banerjee et al. (2007), truncated SVD, Funk SVD and item-based KNN, evaluated on three MovieLens datasets under five train/test protocols, with every test set fingerprinted. On the same splits we then ran the next steps of the usual machine learning chain: an SVR (and its fast versions), ensembles (stacking, bagging, boosting), deep learning (NCF, MLP, GRU, LSTM) and two small transformers.
 
-![Six co-clustering bases](results/figures/overview.png)
+![Best model of each step](results/figures/ensemble_chain.png)
 
-This repository contains all code, all raw results (more than 6,000 runs) and all figures of the study.
+This repository contains all code, all raw results (about 6,800 runs) and all figures of the study.
 
 **Author:** Elif Hüsna Turkay · Independent study supervised by Dr. Hyuk Cho, Department of Computer Science, Sam Houston State University
 
 ## Key findings
-
-- The six co-clustering bases rank very differently on small and large data. C6 (MSSRCC residue 2, Cho et al. 2004), the basis with the most parameters, is the worst on MovieLens latest-small and 100k and the best on MovieLens 20M at 2 × 2 and 3 × 3.
-- The ranking follows **training ratings per learned parameter**: C6 has 2.6 per parameter on latest-small and 32 on 20M. Bases with fewer parameters can use much larger grids without overfitting.
-- With basis and grid size chosen together, co-clustering comes within 0.011 RMSE of a tuned Funk SVD on the small datasets, and 0.051 behind on 20M.
-- Funk SVD beats truncated SVD in all 60 comparisons (5 protocols × 3 datasets × 4 values of K). The best K grows with the data, from about 15 to 50–100.
-- On the small datasets an item-based KNN beats every SVD and co-clustering setup under random splits, but loses to Funk SVD when each user's newest ratings are held out.
-- **Combining the models works best, on all three datasets.** Stacking Funk SVD, co-clustering, KNN and an SVR with an XGBoost meta model gives 0.814 on latest-small, 0.898 on ml-100k (5-fold) and 0.769 on 20M (random 80/20). It is better than every other model in every split.
-- **Deep learning and transformers do not beat stacking.** The best network (NCF + MLP) is 0.027, 0.014 and 0.024 behind stacking on the three datasets. Our two small transformers are close to KNN on latest-small and worse than KNN on ml-100k and 20M. On the temporal splits they are worse than Funk SVD, even though they use the order of the ratings.
-- The SVR beats the traditional models only on latest-small. On 20M we could only run an approximation of it (Nystroem, 500,000 ratings), and there it is worse than every traditional model. Random Forest, XGBoost and CatBoost on the same features are about as good as the SVR. AdaBoost is the weakest ensemble.
-- Temporal splits are harder for every model, but the ranking of the models stays almost the same.
-- **The usual RBF SVR is slow, and a kernel approximation fixes this.** Nystroem with 1,000 components and a linear SVR trains 30 to 35 times faster on the small datasets (about 3 s against 90 to 98 s) and is only 0.003 to 0.005 worse in RMSE. Prediction goes from about 38 s to under 1 s. Nystroem is better than random Fourier features (RBF Sampler) with the same number of components.
-- **The rating scale does not explain why KNN beats the SVR on ml-100k.** When we round latest-small to whole stars like ml-100k, the SVR still beats KNN on every split, by about the same margin.
-- GRU and LSTM over each user's last 20 ratings are about as good as the NCF + MLP network on latest-small and worse on ml-100k. On the temporal splits the rating order did not help them.
 
 | | Best co-clustering | Best Funk SVD | Item-based KNN | SVR | Stacking (XGBoost) | Best deep learning | Best transformer |
 |---|---|---|---|---|---|---|---|
@@ -29,9 +16,26 @@ This repository contains all code, all raw results (more than 6,000 runs) and al
 | ml-100k (5-fold) | C4, 50 × 2: 0.941 | 0.930 | 0.916 | 0.940 | **0.898** | NCF + MLP: 0.911 | HF BERT: 0.941 |
 | ml-20m (random 80/20) | C4, 50 × 50: 0.837 | 0.786 | 0.785 | 0.856 | **0.769** | NCF + MLP: 0.793 | own: 0.803 |
 
-![Best model of each step](results/figures/ensemble_chain.png)
+**Single models**
 
-![Summary](results/figures/summary.png)
+- The six co-clustering bases rank very differently on small and large data. C6 (MSSRCC residue 2, Cho et al. 2004), the basis with the most parameters, is the worst on MovieLens latest-small and 100k and the best on MovieLens 20M at 2 × 2 and 3 × 3.
+- The ranking follows **training ratings per learned parameter**: C6 has 2.6 per parameter on latest-small and 32 on 20M. Bases with fewer parameters can use much larger grids without overfitting.
+- With basis and grid size chosen together, co-clustering comes within 0.011 RMSE of a tuned Funk SVD on the small datasets, and 0.051 behind on 20M.
+- Funk SVD beats truncated SVD in all 60 comparisons (5 protocols × 3 datasets × 4 values of K). The best K grows with the data, from about 15 to 50–100.
+- On the small datasets an item-based KNN beats every SVD and co-clustering setup under random splits, but loses to Funk SVD when each user's newest ratings are held out.
+
+**SVR**
+
+- The SVR beats the traditional models only on latest-small. On 20M we could only run an approximation of it (Nystroem, 500,000 ratings), and there it is worse than every traditional model.
+- **The usual RBF SVR is slow, and a kernel approximation fixes this.** Nystroem with 1,000 components and a linear SVR trains 30 to 35 times faster on the small datasets (about 3 s against 90 to 98 s) and is only 0.003 to 0.005 worse in RMSE. Prediction goes from about 38 s to under 1 s. Nystroem is better than random Fourier features (RBF Sampler) with the same number of components.
+- **The rating scale does not explain why KNN beats the SVR on ml-100k.** When we round latest-small to whole stars like ml-100k, the SVR still beats KNN on every split, by about the same margin.
+
+**Ensembles, deep learning and transformers**
+
+- **Combining the models works best, on all three datasets.** Stacking Funk SVD, co-clustering, KNN and the SVR with an XGBoost meta model gives 0.814 on latest-small, 0.898 on ml-100k (5-fold) and 0.769 on 20M (random 80/20). It is better than every other model in every split.
+- Random Forest, XGBoost and CatBoost on the SVR features are about as good as the SVR. AdaBoost is the weakest ensemble.
+- **Deep learning and transformers do not beat stacking.** The best network (NCF + MLP) is 0.027, 0.014 and 0.024 behind stacking on the three datasets. GRU and LSTM over each user's last 20 ratings are about as good as NCF + MLP on latest-small and worse on ml-100k. Our two small transformers are close to KNN on latest-small and worse than KNN on ml-100k and 20M.
+- Temporal splits are harder for every model, but the ranking of the models stays almost the same. The sequence models (GRU, LSTM, transformers) use the order of the ratings, but on the temporal splits they are still worse than Funk SVD.
 
 ## What we did
 
@@ -118,6 +122,12 @@ Replace `mlsmall` with `ml100k` or `ml20m` for the other datasets. Runs on 20M a
 **Environment.** Python 3.13, NumPy 2.3.4, SciPy 1.17.1, pandas 3.0.3, scikit-learn 1.8.0, Surprise 1.1.5, numba 0.67.0, matplotlib 3.11.2, XGBoost 3.4.1, CatBoost 1.2.10, PyTorch 2.14.0, Transformers 5.20.1. Seed 42 everywhere (the transformers also 43 and 44). Deep learning and transformer runs were made on an Apple M2 GPU. Two 20M transformer runs (HF BERT random, own transformer temporal) were made on a Colab T4 GPU with the same code and the same split fingerprints. GPU runs are not fully deterministic, so the same seed can differ in the third decimal.
 
 ## More figures
+
+![Six co-clustering bases](results/figures/overview.png)
+
+![Single models](results/figures/summary.png)
+
+*Best result of each single model family (co-clustering, truncated SVD, Funk SVD, KNN) on the same splits.*
 
 | | |
 |---|---|
