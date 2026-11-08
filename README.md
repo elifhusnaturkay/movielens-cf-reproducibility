@@ -4,7 +4,7 @@ The six co-clustering bases of Banerjee et al. (2007), truncated SVD, Funk SVD a
 
 ![Best model of each step](results/figures/ensemble_chain.png)
 
-This repository contains all code, all raw results (about 6,800 runs) and all figures of the study.
+This repository contains all code, all raw results (about 7,500 runs) and all figures of the study.
 
 **Author:** Elif Hüsna Turkay · Independent study supervised by Dr. Hyuk Cho, Department of Computer Science, Sam Houston State University
 
@@ -19,9 +19,11 @@ This repository contains all code, all raw results (about 6,800 runs) and all fi
 **Single models**
 
 - The six co-clustering bases rank very differently on small and large data. C6 (MSSRCC residue 2, Cho et al. 2004), the basis with the most parameters, is the worst on MovieLens latest-small and 100k and the best on MovieLens 20M at 2 × 2 and 3 × 3.
+- **C6 is not wrong, it runs out of data.** On synthetic data that has the C6 structure, C6 is clearly the best of the six bases while at least 10% of the matrix is filled (0.307 against 0.675 for C5 on full data). Below that it falls behind. MovieLens is only 1 to 6% filled. When the C6 terms are shrunk toward the C5 terms, with the amount chosen on a validation part of the train set, C6 beats C5 in all four small settings (for example 0.982 → 0.902 on latest-small and 0.996 → 0.944 on ml-100k at 3 × 3, against 0.904 and 0.952 for C5).
 - The ranking follows **training ratings per learned parameter**: C6 has 2.6 per parameter on latest-small and 32 on 20M. Bases with fewer parameters can use much larger grids without overfitting.
 - With basis and grid size chosen together, co-clustering comes within 0.011 RMSE of a tuned Funk SVD on the small datasets, and 0.051 behind on 20M.
 - Funk SVD beats truncated SVD in all 60 comparisons (5 protocols × 3 datasets × 4 values of K). The best K grows with the data, from about 15 to 50–100.
+- **The data maps show only 2 or 3 user groups.** SVD, PCA, t-SNE and UMAP maps with K-means and silhouette scores give 2 or 3 user groups on all three datasets, and almost the same with train ratings only. But fixing the user side at K = 2 or 3 does not reach the best cell of the grid. On latest-small the best basis (C3) gets 0.897 at 3 × 5 against 0.885 at 10 × 5.
 - On the small datasets an item-based KNN beats every SVD and co-clustering setup under random splits, but loses to Funk SVD when each user's newest ratings are held out.
 
 **SVR**
@@ -34,7 +36,9 @@ This repository contains all code, all raw results (about 6,800 runs) and all fi
 
 - **Combining the models works best, on all three datasets.** Stacking Funk SVD, co-clustering, KNN and the SVR with an XGBoost meta model gives 0.814 on latest-small, 0.898 on ml-100k (5-fold) and 0.769 on 20M (random 80/20). It is better than every other model in every split.
 - Random Forest, XGBoost and CatBoost on the SVR features are about as good as the SVR. AdaBoost is the weakest ensemble.
-- **Deep learning and transformers do not beat stacking.** The best network (NCF + MLP) is 0.027, 0.014 and 0.024 behind stacking on the three datasets. GRU and LSTM over each user's last 20 ratings are about as good as NCF + MLP on latest-small and worse on ml-100k. Our two small transformers are close to KNN on latest-small and worse than KNN on ml-100k and 20M.
+- **Hand-set settings are not the reason.** We ran 17 scikit-learn, XGBoost and CatBoost regressors with their default settings on the same features and folds. The best is CatBoost (0.837 on latest-small, 0.932 on ml-100k), about the same as our own CatBoost (0.836, 0.929). None of them comes close to stacking.
+- **Deep learning and transformers do not beat stacking.** The best network (NCF + MLP) is 0.027, 0.014 and 0.024 behind stacking on the three datasets. GRU and LSTM over each user's last 20 ratings are about as good as NCF + MLP on latest-small and worse on ml-100k and 20M (0.806 to 0.808 against 0.793 on 20M). Our two small transformers are close to KNN on latest-small and worse than KNN on ml-100k and 20M.
+- Averaging the seven deep learning models (no learned weights) helps on latest-small, 0.841 → 0.822, but it is still behind stacking (0.814). On ml-100k it gives nothing (0.912 against 0.912 for the hybrid network).
 - Temporal splits are harder for every model, but the ranking of the models stays almost the same. The sequence models (GRU, LSTM, transformers) use the order of the ratings, but on the temporal splits they are still worse than Funk SVD.
 
 ## What we did
@@ -48,10 +52,15 @@ This repository contains all code, all raw results (about 6,800 runs) and all fi
 7. **SVR.** An RBF support vector regression (scikit-learn `SVR`, C = 0.3, ε = 0.3, chosen on a validation part of the latest-small train set) on 26–27 features made from the train ratings: user and movie means, counts and spreads, the movie's genres and the user's taste for these genres. The features of each training rating are computed from the other 4/5 of the train set, so a rating never appears in its own features. Random 80/20, temporal 80/20 and 5-fold CV on the two small datasets. On 20M the exact RBF SVR is too slow. There we approximate the RBF kernel with Nystroem (1,000 components) and train a linear SVR on 500,000 random train ratings, with the same C, ε and γ. On latest-small this approximation gives 0.8475 and the exact SVR 0.8442.
 8. **Stacking.** Funk SVD, the best co-clustering basis, KNN and SVR are combined by a meta model: a linear regression, and XGBoost on the four predictions plus the features. The meta model learns only from out-of-fold predictions (5 folds inside the train set), so it never sees a prediction made on a rating the base model was trained on. Same splits as the SVR, plus random and temporal 80/20 on 20M.
 9. **Bagging and boosting.** Random Forest, AdaBoost, XGBoost and CatBoost on the same features as the SVR (not on the predictions). On 20M each Random Forest tree sees 800,000 ratings and AdaBoost a random 2 million, else they take too long.
-10. **Deep learning.** NCF (He et al., 2017) with user and movie embeddings, an MLP on the SVR features, and a hybrid of both, in PyTorch. Adam, early stopping on 10% of the train set, seed 42. Then GRU and LSTM (2 layers, 64 units) over the user's last 20 train ratings, with the same input as the transformers below, 3 seeds.
+10. **Deep learning.** NCF (He et al., 2017) with user and movie embeddings, an MLP on the SVR features, and a hybrid of both, in PyTorch. Adam, early stopping on 10% of the train set, seed 42. Then GRU and LSTM (2 layers, 64 units) over the user's last 20 train ratings, with the same input as the transformers below, 3 seeds on the small datasets, 1 seed on 20M (on a Colab GPU).
 11. **Transformers.** For each rating, the input is the user's last 20 train ratings before it and the target movie with a masked rating. This goes through a small encoder (2 layers, 4 heads, d = 64), and the output of the target token plus a user embedding gives the rating. We tried two encoders of the same size: our own in plain PyTorch (BST style, Chen et al., 2019) and a Hugging Face `BertModel` (random start). A test rating only sees train ratings with an earlier time, and the code checks this. 3 seeds on the small datasets, 1 seed on 20M.
 12. **Fast SVR.** The usual RBF SVR against `LinearSVR`, `RBFSampler` + `LinearSVR` and `Nystroem` + `LinearSVR` (100, 300, 1,000 and 3,000 components), with the same features, C, ε and γ. RMSE on all splits of the two small datasets. Training and prediction time on the random split, on one core, the median of three runs with nothing else running.
 13. **Rating scale.** Latest-small rounded to whole stars (half up: 0.5 → 1, 1.5 → 2, ...) after the split, then Funk SVD, KNN and the SVR again, to see if the scale explains the different results on latest-small and ml-100k.
+14. **Data maps.** Every user (and every movie) as a point, brought down to 2D with SVD, PCA, t-SNE (perplexity 5, 30, 50) and UMAP. Users and movies with fewer than 20 ratings are left out, and 20M uses a random 5,000 users. Empty cells are 0, once with raw stars and once after removing each user's mean. The number of groups comes from K-means with K = 2 to 15 and the silhouette score. The maps use all ratings, and `train_check.py` repeats the silhouette scores with train ratings only.
+15. **User side fixed.** Following the maps, the user side of co-clustering is fixed at K = 2 and 3 and the movie side takes L = 1, 2, 3, 5, 7, 10, 15 and 20. Six bases, 5-fold CV on the two small datasets.
+16. **C6 check.** Three tests of why C6 gets worse on MovieLens. (a) Synthetic data with the C6 structure (300 users × 200 movies, 3 × 3 true groups, noise 0.3) with 100% down to 2% of the cells kept. (b) Our parallel update against the sequential update of Cho et al. (2004). (c) Shrinkage: a_uh is pulled toward a_u − a_g + a_gh and a_gi toward a_i − a_h + a_gh, as (n·a + λ·prior) / (n + λ). λ = 0 is C6 and a very large λ gives C5. λ from 2 to 200, or chosen on 10% of the train set. On 20M the user side is fixed at K = 2 and 3 for C5 and C6, and C6 with shrinkage is run at 2 × 2 and 3 × 3.
+17. **Default regressors.** 17 regressors of scikit-learn, XGBoost and CatBoost with their default settings, on the SVR features and the same 5 folds, to compare with our hand-set models.
+18. **Deep learning ensemble.** The plain average of the test predictions of NCF, MLP, hybrid, GRU, LSTM and the two transformers (3 seeds each where we have them), and of smaller groups of them. Nothing is learned, so the test set is not used for any choice.
 
 ## Repository layout
 
@@ -77,10 +86,22 @@ code/
   plot_svr_speed.py  figure and tables for svr_speed.py
   quantize.py        latest-small rounded to whole stars, Funk SVD, KNN and SVR again
   plot_ensemble.py   figures and tables for SVR, ensembles, deep learning and transformers
+  viz.py             2D maps of users and movies (SVD, PCA, t-SNE, UMAP) and silhouette scores
+  train_check.py     the same silhouette scores with train ratings only
+  plot_viz.py        the summary figures of the maps
+  run_fixed_users.py co-clustering with the user side fixed at K = 2 and 3
+  plot_20m_bars.py   the six bases on 20M as grouped bars
+  check_c6.py        synthetic data, update order and shrinkage for C6
+  all_regressors.py  17 regressors with default settings on the SVR features
+  save_dl_preds.py   saves the test predictions of NCF, MLP and hybrid
+  dl_average.py      plain average of the deep learning models
+  tema.py            the color theme of the new figures
 scripts/
   download_data.py   fetches the datasets from GroupLens
 results/
   *.jsonl            one JSON line per run (dataset, model, protocol, fold, RMSE, MAE, R², fingerprint)
+  *.md               tables written by check_c6.py, run_fixed_users.py, all_regressors.py, train_check.py
+  viz/               the 2D map coordinates, used by plot_viz.py
   figures/           all figures
 ```
 
@@ -109,6 +130,15 @@ python3 svr_speed.py mlsmall random       # fast SVR versions (needs base_preds.
 python3 quantize.py random                # latest-small with whole stars
 python3 base_preds.py mlsmall kfold 0     # base_preds, stack and dl take the fold the same way
 python3 plot_ensemble.py
+
+python3 viz.py mlsmall                    # 2D maps and silhouette (minutes, t-SNE and UMAP)
+python3 train_check.py && python3 plot_viz.py
+python3 run_fixed_users.py                # runs only the missing cells, then draws
+python3 check_c6.py synthetic             # also: order, shrink, shrink_big, 20m, 20m_shrink, table
+python3 all_regressors.py                 # needs base_preds.py on the 5 folds first
+python3 save_dl_preds.py mlsmall kfold 0  # then dl_average.py, after rnn.py and bst.py with 3 seeds
+python3 dl_average.py
+python3 plot_20m_bars.py
 ```
 
 On 20M we ran only `random` and `temporal`. On a laptop `base_preds.py` takes about 1.5 hours per split (mostly the 50 × 50 co-clustering), `stack.py` about 30 minutes and `dl.py` about 20 minutes. One transformer run takes 3 to 14 hours on a GPU.
@@ -119,9 +149,20 @@ Replace `mlsmall` with `ml100k` or `ml20m` for the other datasets. Runs on 20M a
 
 **Data versions.** The results use MovieLens latest-small as of September 2018 (100,836 ratings; `ratings.csv` md5 `325a6f09399d1c45671f187505e1a100`). GroupLens updates this dataset occasionally; `download_data.py` prints the md5 for comparison. The 20M results were produced with the Kaggle copy (`grouplens/movielens-20m-dataset`); the loader also reads the GroupLens zip.
 
-**Environment.** Python 3.13, NumPy 2.3.4, SciPy 1.17.1, pandas 3.0.3, scikit-learn 1.8.0, Surprise 1.1.5, numba 0.67.0, matplotlib 3.11.2, XGBoost 3.4.1, CatBoost 1.2.10, PyTorch 2.14.0, Transformers 5.20.1. Seed 42 everywhere (the transformers also 43 and 44). Deep learning and transformer runs were made on an Apple M2 GPU. Two 20M transformer runs (HF BERT random, own transformer temporal) were made on a Colab T4 GPU with the same code and the same split fingerprints. GPU runs are not fully deterministic, so the same seed can differ in the third decimal.
+**Environment.** Python 3.13, NumPy 2.3.4, SciPy 1.17.1, pandas 3.0.3, scikit-learn 1.8.0, Surprise 1.1.5, numba 0.67.0, matplotlib 3.11.2, XGBoost 3.4.1, CatBoost 1.2.10, PyTorch 2.14.0, Transformers 5.20.1. Seed 42 everywhere (the transformers also 43 and 44). Deep learning and transformer runs were made on an Apple M2 GPU. Two 20M transformer runs (HF BERT random, own transformer temporal) and the four 20M GRU and LSTM runs were made on a Colab GPU with the same code and the same split fingerprints. GPU runs are not fully deterministic, so the same seed can differ in the third decimal.
 
 ## More figures
+
+![Data maps](results/figures/viz_methods.png)
+
+*Users and movies of the three datasets in 2D with four methods. Colors are the best K-means groups by silhouette.*
+
+| | |
+|---|---|
+| ![Silhouette](results/figures/viz_silhouette.png) | ![User side fixed](results/figures/fixed_users_mlsmall.png) |
+| Silhouette against the number of groups | Co-clustering with the user side fixed, latest-small |
+
+![Six bases on 20M](results/figures/bases_bars_ml20m.png)
 
 ![Six co-clustering bases](results/figures/overview.png)
 
@@ -149,7 +190,7 @@ Replace `mlsmall` with `ml100k` or `ml20m` for the other datasets. Runs on 20M a
 
 ## Limitations
 
-The full 81-cell grid was not run on 20M (K = L only). On 20M the steps after the single models were run on random and temporal 80/20 only, with one seed, and the HF BERT transformer on temporal 80/20 was not run. GRU and LSTM on 20M are not in this version yet. The settings of the SVR, the ensembles, the networks and the transformers were fixed by hand and not tuned. Deep learning uses one seed, small networks and at most 40 epochs. The "best configuration" values of the single-model study are selected on test results, so they are slightly optimistic for every model family.
+The full 81-cell grid was not run on 20M (K = L only). On 20M the steps after the single models were run on random and temporal 80/20 only, with one seed, and the HF BERT transformer on temporal 80/20 was not run. The settings of the SVR, the ensembles, the networks and the transformers were fixed by hand and not tuned. Deep learning uses one seed, small networks and at most 40 epochs. C6 with shrinkage was run on 20M at only two sizes and two values of λ, on one split. The data maps use all ratings, not only the train part, but the silhouette scores with train ratings only give the same number of groups. The deep learning average was run on the two small datasets only, because the 20M predictions of all seven models are not saved in one place. The "best configuration" values of the single-model study are selected on test results, so they are slightly optimistic for every model family.
 
 ## References
 

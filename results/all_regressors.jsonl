@@ -1,0 +1,180 @@
+{"dataset": "mlsmall", "fold": 0, "model": "Mean (baseline)", "fingerprint": "21f0c082ef31", "rmse": 1.045616386748249, "mae": 0.832301743157841, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 0, "model": "Linear regression", "fingerprint": "21f0c082ef31", "rmse": 0.8483661970994406, "mae": 0.6511526876430292, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 0, "model": "Ridge", "fingerprint": "21f0c082ef31", "rmse": 0.8483660718823643, "mae": 0.6511540641533103, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 0, "model": "Lasso", "fingerprint": "21f0c082ef31", "rmse": 1.0456163867510495, "mae": 0.8323017409849337, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 0, "model": "Elastic net", "fingerprint": "21f0c082ef31", "rmse": 1.0456163867510495, "mae": 0.8323017409849337, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 0, "model": "Bayesian ridge", "fingerprint": "21f0c082ef31", "rmse": 0.8483689718678287, "mae": 0.6511717633931989, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 0, "model": "Huber", "fingerprint": "21f0c082ef31", "rmse": 0.8529306981692129, "mae": 0.648366764336052, "seconds": 0.2}
+{"dataset": "mlsmall", "fold": 0, "model": "KNN regressor", "fingerprint": "21f0c082ef31", "rmse": 0.9155616709670141, "mae": 0.7001338754462515, "seconds": 0.8}
+{"dataset": "mlsmall", "fold": 0, "model": "Decision tree", "fingerprint": "21f0c082ef31", "rmse": 1.2097119882462313, "mae": 0.8994683296671595, "seconds": 1.0}
+{"dataset": "mlsmall", "fold": 0, "model": "Random forest", "fingerprint": "21f0c082ef31", "rmse": 0.846891753021544, "mae": 0.6517889686638509, "seconds": 23.0}
+{"dataset": "mlsmall", "fold": 0, "model": "Extra trees", "fingerprint": "21f0c082ef31", "rmse": 0.8494754266517003, "mae": 0.655235729584692, "seconds": 12.5}
+{"dataset": "mlsmall", "fold": 0, "model": "AdaBoost", "fingerprint": "21f0c082ef31", "rmse": 0.9124251269032678, "mae": 0.7284671336433683, "seconds": 1.4}
+{"dataset": "mlsmall", "fold": 0, "model": "Gradient boosting", "fingerprint": "21f0c082ef31", "rmse": 0.8428534118151755, "mae": 0.6476649582729805, "seconds": 9.8}
+{"dataset": "mlsmall", "fold": 0, "model": "Hist gradient boosting", "fingerprint": "21f0c082ef31", "rmse": 0.8386611916134209, "mae": 0.644552918490681, "seconds": 1.0}
+{"dataset": "mlsmall", "fold": 0, "model": "XGBoost", "fingerprint": "21f0c082ef31", "rmse": 0.8486778068544223, "mae": 0.6510801101277055, "seconds": 0.4}
+{"dataset": "mlsmall", "fold": 0, "model": "CatBoost", "fingerprint": "21f0c082ef31", "rmse": 0.835019835277515, "mae": 0.6399658836765452, "seconds": 4.9}
+{"dataset": "mlsmall", "fold": 0, "model": "MLP", "fingerprint": "21f0c082ef31", "rmse": 0.8462204001477961, "mae": 0.6493006842990378, "seconds": 12.7}
+{"dataset": "mlsmall", "fold": 0, "model": "SVR (RBF)", "fingerprint": "21f0c082ef31", "rmse": 0.8455998426361874, "mae": 0.6385141794001284, "seconds": 261.2}
+{"dataset": "mlsmall", "fold": 1, "model": "Mean (baseline)", "fingerprint": "f1a3f778655a", "rmse": 1.0401698853589756, "mae": 0.825634374670051, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 1, "model": "Linear regression", "fingerprint": "f1a3f778655a", "rmse": 0.8427129214990152, "mae": 0.6454820441946711, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 1, "model": "Ridge", "fingerprint": "f1a3f778655a", "rmse": 0.8427129908586961, "mae": 0.6454817017169691, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 1, "model": "Lasso", "fingerprint": "f1a3f778655a", "rmse": 1.040169885472421, "mae": 0.8256343756882042, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 1, "model": "Elastic net", "fingerprint": "f1a3f778655a", "rmse": 1.040169885472421, "mae": 0.8256343756882042, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 1, "model": "Bayesian ridge", "fingerprint": "f1a3f778655a", "rmse": 0.8427221222429068, "mae": 0.645503608568178, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 1, "model": "Huber", "fingerprint": "f1a3f778655a", "rmse": 0.8469556508280689, "mae": 0.642689601217908, "seconds": 0.2}
+{"dataset": "mlsmall", "fold": 1, "model": "KNN regressor", "fingerprint": "f1a3f778655a", "rmse": 0.9083239032332608, "mae": 0.6951405761888234, "seconds": 0.7}
+{"dataset": "mlsmall", "fold": 1, "model": "Decision tree", "fingerprint": "f1a3f778655a", "rmse": 1.206734632975881, "mae": 0.8930908855501011, "seconds": 0.6}
+{"dataset": "mlsmall", "fold": 1, "model": "Random forest", "fingerprint": "f1a3f778655a", "rmse": 0.8449621069258787, "mae": 0.6481208238014412, "seconds": 20.0}
+{"dataset": "mlsmall", "fold": 1, "model": "Extra trees", "fingerprint": "f1a3f778655a", "rmse": 0.8463836367009615, "mae": 0.6502335708249702, "seconds": 11.0}
+{"dataset": "mlsmall", "fold": 1, "model": "AdaBoost", "fingerprint": "f1a3f778655a", "rmse": 0.9111965863678213, "mae": 0.7285286436310329, "seconds": 1.6}
+{"dataset": "mlsmall", "fold": 1, "model": "Gradient boosting", "fingerprint": "f1a3f778655a", "rmse": 0.8367814002504879, "mae": 0.6407806632514134, "seconds": 9.8}
+{"dataset": "mlsmall", "fold": 1, "model": "Hist gradient boosting", "fingerprint": "f1a3f778655a", "rmse": 0.8333643360035051, "mae": 0.6367758527377171, "seconds": 0.9}
+{"dataset": "mlsmall", "fold": 1, "model": "XGBoost", "fingerprint": "f1a3f778655a", "rmse": 0.8439576169006932, "mae": 0.645211390184116, "seconds": 0.3}
+{"dataset": "mlsmall", "fold": 1, "model": "CatBoost", "fingerprint": "f1a3f778655a", "rmse": 0.8307902148469796, "mae": 0.6339923475365882, "seconds": 4.6}
+{"dataset": "mlsmall", "fold": 1, "model": "MLP", "fingerprint": "f1a3f778655a", "rmse": 0.8414386485284309, "mae": 0.6425057283478476, "seconds": 16.0}
+{"dataset": "mlsmall", "fold": 1, "model": "SVR (RBF)", "fingerprint": "f1a3f778655a", "rmse": 0.8403297264641864, "mae": 0.6324509097776382, "seconds": 261.0}
+{"dataset": "mlsmall", "fold": 2, "model": "Mean (baseline)", "fingerprint": "fe1e5d4629b4", "rmse": 1.0454036302091256, "mae": 0.8275822098385546, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 2, "model": "Linear regression", "fingerprint": "fe1e5d4629b4", "rmse": 0.8494774257341348, "mae": 0.6498276729413973, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 2, "model": "Ridge", "fingerprint": "fe1e5d4629b4", "rmse": 0.8494774310557229, "mae": 0.6498288983552015, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 2, "model": "Lasso", "fingerprint": "fe1e5d4629b4", "rmse": 1.0454036293783693, "mae": 0.8275822053178121, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 2, "model": "Elastic net", "fingerprint": "fe1e5d4629b4", "rmse": 1.0454036293783693, "mae": 0.8275822053178121, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 2, "model": "Bayesian ridge", "fingerprint": "fe1e5d4629b4", "rmse": 0.8494789920254332, "mae": 0.6498473155845487, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 2, "model": "Huber", "fingerprint": "fe1e5d4629b4", "rmse": 0.8548287675533401, "mae": 0.6477288552688594, "seconds": 0.3}
+{"dataset": "mlsmall", "fold": 2, "model": "KNN regressor", "fingerprint": "fe1e5d4629b4", "rmse": 0.9121402313549002, "mae": 0.700193385233302, "seconds": 0.9}
+{"dataset": "mlsmall", "fold": 2, "model": "Decision tree", "fingerprint": "fe1e5d4629b4", "rmse": 1.221258779742357, "mae": 0.9023610294516973, "seconds": 1.0}
+{"dataset": "mlsmall", "fold": 2, "model": "Random forest", "fingerprint": "fe1e5d4629b4", "rmse": 0.8528390848130806, "mae": 0.6518027129915932, "seconds": 24.2}
+{"dataset": "mlsmall", "fold": 2, "model": "Extra trees", "fingerprint": "fe1e5d4629b4", "rmse": 0.8549386069809376, "mae": 0.6534681645192381, "seconds": 12.6}
+{"dataset": "mlsmall", "fold": 2, "model": "AdaBoost", "fingerprint": "fe1e5d4629b4", "rmse": 0.910884750275798, "mae": 0.7278161587172349, "seconds": 1.3}
+{"dataset": "mlsmall", "fold": 2, "model": "Gradient boosting", "fingerprint": "fe1e5d4629b4", "rmse": 0.8439975153226951, "mae": 0.6450369605233787, "seconds": 9.9}
+{"dataset": "mlsmall", "fold": 2, "model": "Hist gradient boosting", "fingerprint": "fe1e5d4629b4", "rmse": 0.8405241326778655, "mae": 0.6402635185057184, "seconds": 0.8}
+{"dataset": "mlsmall", "fold": 2, "model": "XGBoost", "fingerprint": "fe1e5d4629b4", "rmse": 0.8507659934972372, "mae": 0.6470388669703306, "seconds": 0.4}
+{"dataset": "mlsmall", "fold": 2, "model": "CatBoost", "fingerprint": "fe1e5d4629b4", "rmse": 0.8385902206060338, "mae": 0.6384424629990635, "seconds": 5.1}
+{"dataset": "mlsmall", "fold": 2, "model": "MLP", "fingerprint": "fe1e5d4629b4", "rmse": 0.8518985316090901, "mae": 0.6509332546204434, "seconds": 14.5}
+{"dataset": "mlsmall", "fold": 2, "model": "SVR (RBF)", "fingerprint": "fe1e5d4629b4", "rmse": 0.8526231410558888, "mae": 0.6398149959097699, "seconds": 268.9}
+{"dataset": "mlsmall", "fold": 3, "model": "Mean (baseline)", "fingerprint": "ecb488debe4e", "rmse": 1.0446321285145492, "mae": 0.8287140148912022, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 3, "model": "Linear regression", "fingerprint": "ecb488debe4e", "rmse": 0.8552971384867513, "mae": 0.6581160651796332, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 3, "model": "Ridge", "fingerprint": "ecb488debe4e", "rmse": 0.8552970704797679, "mae": 0.6581150422626124, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 3, "model": "Lasso", "fingerprint": "ecb488debe4e", "rmse": 1.044632128179819, "mae": 0.8287140187565996, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 3, "model": "Elastic net", "fingerprint": "ecb488debe4e", "rmse": 1.044632128179819, "mae": 0.8287140187565996, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 3, "model": "Bayesian ridge", "fingerprint": "ecb488debe4e", "rmse": 0.855297071027953, "mae": 0.6581380445128329, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 3, "model": "Huber", "fingerprint": "ecb488debe4e", "rmse": 0.8586661195738438, "mae": 0.6547423821696049, "seconds": 0.2}
+{"dataset": "mlsmall", "fold": 3, "model": "KNN regressor", "fingerprint": "ecb488debe4e", "rmse": 0.9240316456023984, "mae": 0.708137055585858, "seconds": 0.8}
+{"dataset": "mlsmall", "fold": 3, "model": "Decision tree", "fingerprint": "ecb488debe4e", "rmse": 1.2136960497473965, "mae": 0.8933943535762101, "seconds": 0.9}
+{"dataset": "mlsmall", "fold": 3, "model": "Random forest", "fingerprint": "ecb488debe4e", "rmse": 0.8556823070284179, "mae": 0.6579791853950087, "seconds": 22.8}
+{"dataset": "mlsmall", "fold": 3, "model": "Extra trees", "fingerprint": "ecb488debe4e", "rmse": 0.8589244245810692, "mae": 0.6597401616264982, "seconds": 12.5}
+{"dataset": "mlsmall", "fold": 3, "model": "AdaBoost", "fingerprint": "ecb488debe4e", "rmse": 0.9222617038270493, "mae": 0.7370375492163684, "seconds": 1.7}
+{"dataset": "mlsmall", "fold": 3, "model": "Gradient boosting", "fingerprint": "ecb488debe4e", "rmse": 0.849795676148093, "mae": 0.6541425459956828, "seconds": 9.9}
+{"dataset": "mlsmall", "fold": 3, "model": "Hist gradient boosting", "fingerprint": "ecb488debe4e", "rmse": 0.8468025212425044, "mae": 0.6492295493726286, "seconds": 0.8}
+{"dataset": "mlsmall", "fold": 3, "model": "XGBoost", "fingerprint": "ecb488debe4e", "rmse": 0.8579371904905255, "mae": 0.6560404193255333, "seconds": 0.3}
+{"dataset": "mlsmall", "fold": 3, "model": "CatBoost", "fingerprint": "ecb488debe4e", "rmse": 0.8432847549443185, "mae": 0.6452928199226613, "seconds": 4.7}
+{"dataset": "mlsmall", "fold": 3, "model": "MLP", "fingerprint": "ecb488debe4e", "rmse": 0.8530333392144321, "mae": 0.6530238316818926, "seconds": 15.5}
+{"dataset": "mlsmall", "fold": 3, "model": "SVR (RBF)", "fingerprint": "ecb488debe4e", "rmse": 0.8529456064184107, "mae": 0.6442990838847802, "seconds": 262.9}
+{"dataset": "mlsmall", "fold": 4, "model": "Mean (baseline)", "fingerprint": "18b56fcc23ca", "rmse": 1.0367984488401347, "mae": 0.8213181835256905, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 4, "model": "Linear regression", "fingerprint": "18b56fcc23ca", "rmse": 0.8479588370053055, "mae": 0.6489543434990388, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 4, "model": "Ridge", "fingerprint": "18b56fcc23ca", "rmse": 0.8479574109103568, "mae": 0.6489534581925829, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 4, "model": "Lasso", "fingerprint": "18b56fcc23ca", "rmse": 1.0367984489437303, "mae": 0.8213181865228897, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 4, "model": "Elastic net", "fingerprint": "18b56fcc23ca", "rmse": 1.0367984489437303, "mae": 0.8213181865228897, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 4, "model": "Bayesian ridge", "fingerprint": "18b56fcc23ca", "rmse": 0.8479607068666354, "mae": 0.6489767575291168, "seconds": 0.0}
+{"dataset": "mlsmall", "fold": 4, "model": "Huber", "fingerprint": "18b56fcc23ca", "rmse": 0.8521840443826021, "mae": 0.645926774763316, "seconds": 0.2}
+{"dataset": "mlsmall", "fold": 4, "model": "KNN regressor", "fingerprint": "18b56fcc23ca", "rmse": 0.9062585759789692, "mae": 0.6953686715922051, "seconds": 0.8}
+{"dataset": "mlsmall", "fold": 4, "model": "Decision tree", "fingerprint": "18b56fcc23ca", "rmse": 1.211045448619808, "mae": 0.8978282531339504, "seconds": 0.9}
+{"dataset": "mlsmall", "fold": 4, "model": "Random forest", "fingerprint": "18b56fcc23ca", "rmse": 0.8472353789523063, "mae": 0.6496941535017705, "seconds": 22.2}
+{"dataset": "mlsmall", "fold": 4, "model": "Extra trees", "fingerprint": "18b56fcc23ca", "rmse": 0.8457895992121424, "mae": 0.6483233417134097, "seconds": 12.2}
+{"dataset": "mlsmall", "fold": 4, "model": "AdaBoost", "fingerprint": "18b56fcc23ca", "rmse": 0.9146556390036442, "mae": 0.732061138733191, "seconds": 1.6}
+{"dataset": "mlsmall", "fold": 4, "model": "Gradient boosting", "fingerprint": "18b56fcc23ca", "rmse": 0.8423799995445554, "mae": 0.6461093234694693, "seconds": 9.8}
+{"dataset": "mlsmall", "fold": 4, "model": "Hist gradient boosting", "fingerprint": "18b56fcc23ca", "rmse": 0.8364025556605846, "mae": 0.6401455180523946, "seconds": 0.9}
+{"dataset": "mlsmall", "fold": 4, "model": "XGBoost", "fingerprint": "18b56fcc23ca", "rmse": 0.8504964741782332, "mae": 0.6502026639767547, "seconds": 0.3}
+{"dataset": "mlsmall", "fold": 4, "model": "CatBoost", "fingerprint": "18b56fcc23ca", "rmse": 0.8348105333200408, "mae": 0.6367122323583221, "seconds": 4.6}
+{"dataset": "mlsmall", "fold": 4, "model": "MLP", "fingerprint": "18b56fcc23ca", "rmse": 0.8476859444969866, "mae": 0.6457521811311646, "seconds": 11.6}
+{"dataset": "mlsmall", "fold": 4, "model": "SVR (RBF)", "fingerprint": "18b56fcc23ca", "rmse": 0.8460434438762832, "mae": 0.635849492292658, "seconds": 253.6}
+{"dataset": "ml100k", "fold": 0, "model": "Mean (baseline)", "fingerprint": "3853c40bc9fc", "rmse": 1.1239301485885367, "mae": 0.9443939399999999, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 0, "model": "Linear regression", "fingerprint": "3853c40bc9fc", "rmse": 0.9367636113330075, "mae": 0.7410834478318691, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 0, "model": "Ridge", "fingerprint": "3853c40bc9fc", "rmse": 0.9367637577392615, "mae": 0.7410835926771164, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 0, "model": "Lasso", "fingerprint": "3853c40bc9fc", "rmse": 1.1239301481372088, "mae": 0.9443939311981201, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 0, "model": "Elastic net", "fingerprint": "3853c40bc9fc", "rmse": 1.1239301481372088, "mae": 0.9443939311981201, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 0, "model": "Bayesian ridge", "fingerprint": "3853c40bc9fc", "rmse": 0.9367702607944599, "mae": 0.7411174460828305, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 0, "model": "Huber", "fingerprint": "3853c40bc9fc", "rmse": 0.940753281038265, "mae": 0.7369268793463948, "seconds": 0.2}
+{"dataset": "ml100k", "fold": 0, "model": "KNN regressor", "fingerprint": "3853c40bc9fc", "rmse": 1.0108234267170502, "mae": 0.7956, "seconds": 0.7}
+{"dataset": "ml100k", "fold": 0, "model": "Decision tree", "fingerprint": "3853c40bc9fc", "rmse": 1.3468852957843145, "mae": 0.9878, "seconds": 0.8}
+{"dataset": "ml100k", "fold": 0, "model": "Random forest", "fingerprint": "3853c40bc9fc", "rmse": 0.9437707091896186, "mae": 0.746596996031746, "seconds": 21.9}
+{"dataset": "ml100k", "fold": 0, "model": "Extra trees", "fingerprint": "3853c40bc9fc", "rmse": 0.9522628910915305, "mae": 0.75252575, "seconds": 10.8}
+{"dataset": "ml100k", "fold": 0, "model": "AdaBoost", "fingerprint": "3853c40bc9fc", "rmse": 0.9781482882345074, "mae": 0.7980037893542223, "seconds": 1.3}
+{"dataset": "ml100k", "fold": 0, "model": "Gradient boosting", "fingerprint": "3853c40bc9fc", "rmse": 0.9321405457852608, "mae": 0.7389628296181728, "seconds": 9.8}
+{"dataset": "ml100k", "fold": 0, "model": "Hist gradient boosting", "fingerprint": "3853c40bc9fc", "rmse": 0.9303628425771692, "mae": 0.7348215224330108, "seconds": 0.7}
+{"dataset": "ml100k", "fold": 0, "model": "XGBoost", "fingerprint": "3853c40bc9fc", "rmse": 0.9453166808357051, "mae": 0.7433279806911945, "seconds": 0.3}
+{"dataset": "ml100k", "fold": 0, "model": "CatBoost", "fingerprint": "3853c40bc9fc", "rmse": 0.9321769335227795, "mae": 0.7332135615558709, "seconds": 4.4}
+{"dataset": "ml100k", "fold": 0, "model": "MLP", "fingerprint": "3853c40bc9fc", "rmse": 0.9385743441078563, "mae": 0.7382650859236717, "seconds": 11.6}
+{"dataset": "ml100k", "fold": 0, "model": "SVR (RBF)", "fingerprint": "3853c40bc9fc", "rmse": 0.9433117104746314, "mae": 0.7273765921722576, "seconds": 221.8}
+{"dataset": "ml100k", "fold": 1, "model": "Mean (baseline)", "fingerprint": "970cdb26f775", "rmse": 1.1214867420081256, "mae": 0.9414128250000001, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 1, "model": "Linear regression", "fingerprint": "970cdb26f775", "rmse": 0.9317202647679546, "mae": 0.7352385741770268, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 1, "model": "Ridge", "fingerprint": "970cdb26f775", "rmse": 0.9317201803938784, "mae": 0.7352389749348164, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 1, "model": "Lasso", "fingerprint": "970cdb26f775", "rmse": 1.121486741763238, "mae": 0.9414128200292587, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 1, "model": "Elastic net", "fingerprint": "970cdb26f775", "rmse": 1.121486741763238, "mae": 0.9414128200292587, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 1, "model": "Bayesian ridge", "fingerprint": "970cdb26f775", "rmse": 0.9317285311844894, "mae": 0.7352717046439647, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 1, "model": "Huber", "fingerprint": "970cdb26f775", "rmse": 0.9358068065126192, "mae": 0.7309715550555338, "seconds": 0.2}
+{"dataset": "ml100k", "fold": 1, "model": "KNN regressor", "fingerprint": "970cdb26f775", "rmse": 1.0103385571183552, "mae": 0.79076, "seconds": 0.8}
+{"dataset": "ml100k", "fold": 1, "model": "Decision tree", "fingerprint": "970cdb26f775", "rmse": 1.3433028325735044, "mae": 0.989075, "seconds": 0.8}
+{"dataset": "ml100k", "fold": 1, "model": "Random forest", "fingerprint": "970cdb26f775", "rmse": 0.9366806527747693, "mae": 0.7394018988095239, "seconds": 21.9}
+{"dataset": "ml100k", "fold": 1, "model": "Extra trees", "fingerprint": "970cdb26f775", "rmse": 0.9434924194802344, "mae": 0.7445965833333333, "seconds": 10.8}
+{"dataset": "ml100k", "fold": 1, "model": "AdaBoost", "fingerprint": "970cdb26f775", "rmse": 0.973289379005284, "mae": 0.792037106876669, "seconds": 1.2}
+{"dataset": "ml100k", "fold": 1, "model": "Gradient boosting", "fingerprint": "970cdb26f775", "rmse": 0.927776497483149, "mae": 0.733015189212485, "seconds": 9.8}
+{"dataset": "ml100k", "fold": 1, "model": "Hist gradient boosting", "fingerprint": "970cdb26f775", "rmse": 0.9240555737206431, "mae": 0.7279572574824272, "seconds": 0.8}
+{"dataset": "ml100k", "fold": 1, "model": "XGBoost", "fingerprint": "970cdb26f775", "rmse": 0.9356143627169073, "mae": 0.7342086020946502, "seconds": 0.3}
+{"dataset": "ml100k", "fold": 1, "model": "CatBoost", "fingerprint": "970cdb26f775", "rmse": 0.922493177874932, "mae": 0.7245362456692311, "seconds": 4.4}
+{"dataset": "ml100k", "fold": 1, "model": "MLP", "fingerprint": "970cdb26f775", "rmse": 0.9307386544096375, "mae": 0.7313954797029495, "seconds": 10.4}
+{"dataset": "ml100k", "fold": 1, "model": "SVR (RBF)", "fingerprint": "970cdb26f775", "rmse": 0.9356485119262977, "mae": 0.7208267993198512, "seconds": 217.3}
+{"dataset": "ml100k", "fold": 2, "model": "Mean (baseline)", "fingerprint": "e3c1e47e4409", "rmse": 1.1231705776088734, "mae": 0.9414410137500001, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 2, "model": "Linear regression", "fingerprint": "e3c1e47e4409", "rmse": 0.9398292895554802, "mae": 0.7442340299010277, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 2, "model": "Ridge", "fingerprint": "e3c1e47e4409", "rmse": 0.9398291695759922, "mae": 0.744233902412653, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 2, "model": "Lasso", "fingerprint": "e3c1e47e4409", "rmse": 1.123170577616859, "mae": 0.9414410133123398, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 2, "model": "Elastic net", "fingerprint": "e3c1e47e4409", "rmse": 1.123170577616859, "mae": 0.9414410133123398, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 2, "model": "Bayesian ridge", "fingerprint": "e3c1e47e4409", "rmse": 0.9398350423735168, "mae": 0.7442651138782501, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 2, "model": "Huber", "fingerprint": "e3c1e47e4409", "rmse": 0.9437708623842282, "mae": 0.7400320120044834, "seconds": 0.2}
+{"dataset": "ml100k", "fold": 2, "model": "KNN regressor", "fingerprint": "e3c1e47e4409", "rmse": 1.012569997580414, "mae": 0.7939700000000001, "seconds": 0.8}
+{"dataset": "ml100k", "fold": 2, "model": "Decision tree", "fingerprint": "e3c1e47e4409", "rmse": 1.3400466409793355, "mae": 0.9859, "seconds": 0.8}
+{"dataset": "ml100k", "fold": 2, "model": "Random forest", "fingerprint": "e3c1e47e4409", "rmse": 0.9453443604625126, "mae": 0.7481997071428572, "seconds": 22.1}
+{"dataset": "ml100k", "fold": 2, "model": "Extra trees", "fingerprint": "e3c1e47e4409", "rmse": 0.9504061676316197, "mae": 0.7516829166666666, "seconds": 10.8}
+{"dataset": "ml100k", "fold": 2, "model": "AdaBoost", "fingerprint": "e3c1e47e4409", "rmse": 0.9819782318453104, "mae": 0.799897272404761, "seconds": 1.4}
+{"dataset": "ml100k", "fold": 2, "model": "Gradient boosting", "fingerprint": "e3c1e47e4409", "rmse": 0.9362032977051885, "mae": 0.7420077938641096, "seconds": 9.8}
+{"dataset": "ml100k", "fold": 2, "model": "Hist gradient boosting", "fingerprint": "e3c1e47e4409", "rmse": 0.9316652724564356, "mae": 0.7366437267245188, "seconds": 0.7}
+{"dataset": "ml100k", "fold": 2, "model": "XGBoost", "fingerprint": "e3c1e47e4409", "rmse": 0.942009518329375, "mae": 0.7412003551423549, "seconds": 0.3}
+{"dataset": "ml100k", "fold": 2, "model": "CatBoost", "fingerprint": "e3c1e47e4409", "rmse": 0.9303498944205435, "mae": 0.7334965366510291, "seconds": 4.4}
+{"dataset": "ml100k", "fold": 2, "model": "MLP", "fingerprint": "e3c1e47e4409", "rmse": 0.9391564621724126, "mae": 0.7418301023542881, "seconds": 14.6}
+{"dataset": "ml100k", "fold": 2, "model": "SVR (RBF)", "fingerprint": "e3c1e47e4409", "rmse": 0.9465058288356127, "mae": 0.7316986261415077, "seconds": 219.9}
+{"dataset": "ml100k", "fold": 3, "model": "Mean (baseline)", "fingerprint": "2712bb4931b3", "rmse": 1.126628656171256, "mae": 0.9456139062500001, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 3, "model": "Linear regression", "fingerprint": "2712bb4931b3", "rmse": 0.942379437524294, "mae": 0.7473841547966004, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 3, "model": "Ridge", "fingerprint": "2712bb4931b3", "rmse": 0.9423793673806176, "mae": 0.7473839891076088, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 3, "model": "Lasso", "fingerprint": "2712bb4931b3", "rmse": 1.1266286574208835, "mae": 0.9456138969898223, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 3, "model": "Elastic net", "fingerprint": "2712bb4931b3", "rmse": 1.1266286574208835, "mae": 0.9456138969898223, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 3, "model": "Bayesian ridge", "fingerprint": "2712bb4931b3", "rmse": 0.9423781799623688, "mae": 0.7474135910511017, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 3, "model": "Huber", "fingerprint": "2712bb4931b3", "rmse": 0.9468514102723815, "mae": 0.7432965416055742, "seconds": 0.3}
+{"dataset": "ml100k", "fold": 3, "model": "KNN regressor", "fingerprint": "2712bb4931b3", "rmse": 1.0135551292357017, "mae": 0.7985899999999999, "seconds": 0.8}
+{"dataset": "ml100k", "fold": 3, "model": "Decision tree", "fingerprint": "2712bb4931b3", "rmse": 1.3492935394329713, "mae": 0.9957916666666666, "seconds": 0.8}
+{"dataset": "ml100k", "fold": 3, "model": "Random forest", "fingerprint": "2712bb4931b3", "rmse": 0.9469850320381521, "mae": 0.7516128513888889, "seconds": 21.8}
+{"dataset": "ml100k", "fold": 3, "model": "Extra trees", "fingerprint": "2712bb4931b3", "rmse": 0.9563037769918558, "mae": 0.7571856666666666, "seconds": 10.8}
+{"dataset": "ml100k", "fold": 3, "model": "AdaBoost", "fingerprint": "2712bb4931b3", "rmse": 0.9929506281630152, "mae": 0.8157741778563022, "seconds": 1.5}
+{"dataset": "ml100k", "fold": 3, "model": "Gradient boosting", "fingerprint": "2712bb4931b3", "rmse": 0.9369913292689286, "mae": 0.7437395533396858, "seconds": 9.8}
+{"dataset": "ml100k", "fold": 3, "model": "Hist gradient boosting", "fingerprint": "2712bb4931b3", "rmse": 0.9341852079135761, "mae": 0.740584787810545, "seconds": 0.8}
+{"dataset": "ml100k", "fold": 3, "model": "XGBoost", "fingerprint": "2712bb4931b3", "rmse": 0.9467442661031049, "mae": 0.746177499115467, "seconds": 0.3}
+{"dataset": "ml100k", "fold": 3, "model": "CatBoost", "fingerprint": "2712bb4931b3", "rmse": 0.9345106319577059, "mae": 0.7367542317426754, "seconds": 4.4}
+{"dataset": "ml100k", "fold": 3, "model": "MLP", "fingerprint": "2712bb4931b3", "rmse": 0.9410978700298651, "mae": 0.743841630768776, "seconds": 11.5}
+{"dataset": "ml100k", "fold": 3, "model": "SVR (RBF)", "fingerprint": "2712bb4931b3", "rmse": 0.9460149573148859, "mae": 0.7307846207999537, "seconds": 219.9}
+{"dataset": "ml100k", "fold": 4, "model": "Mean (baseline)", "fingerprint": "83f1413e4316", "rmse": 1.1331377829532692, "mae": 0.9506845574999999, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 4, "model": "Linear regression", "fingerprint": "83f1413e4316", "rmse": 0.94730065862543, "mae": 0.748762727856636, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 4, "model": "Ridge", "fingerprint": "83f1413e4316", "rmse": 0.9473007086153615, "mae": 0.7487624468266963, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 4, "model": "Lasso", "fingerprint": "83f1413e4316", "rmse": 1.1331377825091251, "mae": 0.950684544467926, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 4, "model": "Elastic net", "fingerprint": "83f1413e4316", "rmse": 1.1331377825091251, "mae": 0.950684544467926, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 4, "model": "Bayesian ridge", "fingerprint": "83f1413e4316", "rmse": 0.9473069578161618, "mae": 0.7487967146098614, "seconds": 0.0}
+{"dataset": "ml100k", "fold": 4, "model": "Huber", "fingerprint": "83f1413e4316", "rmse": 0.9513621536480323, "mae": 0.7442260812518818, "seconds": 0.3}
+{"dataset": "ml100k", "fold": 4, "model": "KNN regressor", "fingerprint": "83f1413e4316", "rmse": 1.0234031463699924, "mae": 0.8015100000000001, "seconds": 0.8}
+{"dataset": "ml100k", "fold": 4, "model": "Decision tree", "fingerprint": "83f1413e4316", "rmse": 1.353440061472986, "mae": 0.9942, "seconds": 0.8}
+{"dataset": "ml100k", "fold": 4, "model": "Random forest", "fingerprint": "83f1413e4316", "rmse": 0.9545007627817215, "mae": 0.7540564067460317, "seconds": 22.1}
+{"dataset": "ml100k", "fold": 4, "model": "Extra trees", "fingerprint": "83f1413e4316", "rmse": 0.9602764329290232, "mae": 0.7591570833333333, "seconds": 10.8}
+{"dataset": "ml100k", "fold": 4, "model": "AdaBoost", "fingerprint": "83f1413e4316", "rmse": 0.9979485974414953, "mae": 0.8145296996646404, "seconds": 2.1}
+{"dataset": "ml100k", "fold": 4, "model": "Gradient boosting", "fingerprint": "83f1413e4316", "rmse": 0.9426152807416799, "mae": 0.7449314829389394, "seconds": 9.8}
+{"dataset": "ml100k", "fold": 4, "model": "Hist gradient boosting", "fingerprint": "83f1413e4316", "rmse": 0.9388993727077786, "mae": 0.7396870654431843, "seconds": 0.8}
+{"dataset": "ml100k", "fold": 4, "model": "XGBoost", "fingerprint": "83f1413e4316", "rmse": 0.956029979912342, "mae": 0.7505374949455261, "seconds": 0.3}
+{"dataset": "ml100k", "fold": 4, "model": "CatBoost", "fingerprint": "83f1413e4316", "rmse": 0.9384075199502353, "mae": 0.7355921032872278, "seconds": 4.4}
+{"dataset": "ml100k", "fold": 4, "model": "MLP", "fingerprint": "83f1413e4316", "rmse": 0.9493312569335108, "mae": 0.7515962796211243, "seconds": 20.2}
+{"dataset": "ml100k", "fold": 4, "model": "SVR (RBF)", "fingerprint": "83f1413e4316", "rmse": 0.9522772329185071, "mae": 0.7337031517130076, "seconds": 213.5}

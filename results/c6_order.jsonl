@@ -1,0 +1,8 @@
+{"k": 3, "l": 3, "sequential": false, "basis": "C5", "train": 0.8096205181570928, "test": 0.9045593428264036, "n_iter": 50}
+{"k": 3, "l": 3, "sequential": false, "basis": "C6", "train": 0.7273951112537668, "test": 0.9795459353975258, "n_iter": 50}
+{"k": 3, "l": 3, "sequential": true, "basis": "C5", "train": 0.7910809834552248, "test": 0.916931682628874, "n_iter": 50}
+{"k": 3, "l": 3, "sequential": true, "basis": "C6", "train": 0.727475791860495, "test": 0.9806636540449715, "n_iter": 50}
+{"k": 10, "l": 10, "sequential": false, "basis": "C5", "train": 0.7784131143588856, "test": 0.9121447345739003, "n_iter": 50}
+{"k": 10, "l": 10, "sequential": false, "basis": "C6", "train": 0.6274179094464938, "test": 1.0687720505161376, "n_iter": 50}
+{"k": 10, "l": 10, "sequential": true, "basis": "C5", "train": 0.7543042149567484, "test": 0.9404625832407023, "n_iter": 50}
+{"k": 10, "l": 10, "sequential": true, "basis": "C6", "train": 0.630572032343511, "test": 1.0654733024508276, "n_iter": 50}
