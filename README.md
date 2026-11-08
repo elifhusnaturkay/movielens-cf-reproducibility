@@ -4,7 +4,7 @@ The six co-clustering bases of Banerjee et al. (2007), truncated SVD, Funk SVD a
 
 ![Best model of each step](results/figures/ensemble_chain.png)
 
-This repository contains all code, all raw results (about 7,500 runs) and all figures of the study.
+This repository contains all code, all raw results (about 7,800 runs) and all figures of the study.
 
 **Author:** Elif Hüsna Turkay · Independent study supervised by Dr. Hyuk Cho, Department of Computer Science, Sam Houston State University
 
@@ -36,9 +36,12 @@ This repository contains all code, all raw results (about 7,500 runs) and all fi
 
 - **Combining the models works best, on all three datasets.** Stacking Funk SVD, co-clustering, KNN and the SVR with an XGBoost meta model gives 0.814 on latest-small, 0.898 on ml-100k (5-fold) and 0.769 on 20M (random 80/20). It is better than every other model in every split.
 - Random Forest, XGBoost and CatBoost on the SVR features are about as good as the SVR. AdaBoost is the weakest ensemble.
-- **Hand-set settings are not the reason.** We ran 17 scikit-learn, XGBoost and CatBoost regressors with their default settings on the same features and folds. The best is CatBoost (0.837 on latest-small, 0.932 on ml-100k), about the same as our own CatBoost (0.836, 0.929). None of them comes close to stacking.
+- **Stacking has two levels.** Level 1 is four different models on the same data (Funk SVD, co-clustering, KNN, SVR). Level 2 is XGBoost on their out-of-fold predictions plus the features, so we call it XGBoost-based stacking. A linear regression at level 2 gives 0.825, 0.907 and 0.775.
+- **Hand-set settings are not the reason.** We ran 17 scikit-learn, XGBoost and CatBoost regressors with their default settings on the same features and folds. The best is CatBoost (0.837 on latest-small, 0.932 on ml-100k), about the same as our own CatBoost (0.836, 0.929). None of them comes close to stacking. PyCaret's `compare_models()` with 10-fold CV inside each train part gives the same picture: CatBoost and LightGBM are best (0.839 on latest-small, 0.933 on ml-100k), and PyCaret's CV ranking matches the test ranking.
 - **Deep learning and transformers do not beat stacking.** The best network (NCF + MLP) is 0.027, 0.014 and 0.024 behind stacking on the three datasets. GRU and LSTM over each user's last 20 ratings are about as good as NCF + MLP on latest-small and worse on ml-100k and 20M (0.806 to 0.808 against 0.793 on 20M). Our two small transformers are close to KNN on latest-small and worse than KNN on ml-100k and 20M.
 - Averaging the seven deep learning models (no learned weights) helps on latest-small, 0.841 → 0.822, but it is still behind stacking (0.814). On ml-100k it gives nothing (0.912 against 0.912 for the hybrid network).
+- **A ready transformer for tables is as good as boosting, a ready CNN is not.** TabICLv2 from Hugging Face, with no training on our data and 20,000 train rows as context, gets 0.843 on latest-small and 0.933 on ml-100k. EfficientNetV2B0 from Keras Applications, on the features turned into small images with IGTD, gets 0.865 and 0.953 and is about 30 times slower. Neither beats stacking.
+- **Same seed, same numbers.** NCF, MLP and the hybrid network trained twice with seed 42 in separate processes give the same RMSE to five or six decimals, and the same numbers as before all settings were moved into `config.py`.
 - Temporal splits are harder for every model, but the ranking of the models stays almost the same. The sequence models (GRU, LSTM, transformers) use the order of the ratings, but on the temporal splits they are still worse than Funk SVD.
 
 ## What we did
@@ -61,6 +64,9 @@ This repository contains all code, all raw results (about 7,500 runs) and all fi
 16. **C6 check.** Three tests of why C6 gets worse on MovieLens. (a) Synthetic data with the C6 structure (300 users × 200 movies, 3 × 3 true groups, noise 0.3) with 100% down to 2% of the cells kept. (b) Our parallel update against the sequential update of Cho et al. (2004). (c) Shrinkage: a_uh is pulled toward a_u − a_g + a_gh and a_gi toward a_i − a_h + a_gh, as (n·a + λ·prior) / (n + λ). λ = 0 is C6 and a very large λ gives C5. λ from 2 to 200, or chosen on 10% of the train set. On 20M the user side is fixed at K = 2 and 3 for C5 and C6, and C6 with shrinkage is run at 2 × 2 and 3 × 3.
 17. **Default regressors.** 17 regressors of scikit-learn, XGBoost and CatBoost with their default settings, on the SVR features and the same 5 folds, to compare with our hand-set models.
 18. **Deep learning ensemble.** The plain average of the test predictions of NCF, MLP, hybrid, GRU, LSTM and the two transformers (3 seeds each where we have them), and of smaller groups of them. Nothing is learned, so the test set is not used for any choice.
+19. **PyCaret.** `setup()` and `compare_models()` on the SVR features of each outer fold, with 10-fold CV inside the train part and seed 42. Every model with default settings, refit on the whole train part and scored on our test part. Kernel ridge, SVM and Theil-Sen are left out (memory and time). PyCaret 3.3.2 needs Python 3.11, so it runs in its own environment.
+20. **Ready deep learning models.** TabICLv2 (Qu et al., 2026), a transformer pretrained on synthetic tables, predicts from 20,000 random train rows given as context (the whole train part did not fit in 15 GB of GPU memory). For the CNN, IGTD (Zhu et al., 2021) places the 27 features on a 6 × 5 grid so that correlated features are close, the image is made 32 × 32, and EfficientNetV2B0 with ImageNet weights is fine-tuned (Adam, learning rate 1e-4, at most 15 epochs, early stopping). Both on the SVR features and the same 5 folds, on a Colab T4 GPU. TabICLv2 also ran on an Apple M2 for 8 of the 10 folds, with the same RMSE (largest difference 0.00003).
+21. **Seeds and settings.** All training numbers of the networks are in `config.py`, and `set_all_seeds()` fixes Python, NumPy, PyTorch (CPU, CUDA, MPS) and the hash seed. `seed_check.py` trains each network twice in separate processes.
 
 ## Repository layout
 
@@ -96,6 +102,13 @@ code/
   save_dl_preds.py   saves the test predictions of NCF, MLP and hybrid
   dl_average.py      plain average of the deep learning models
   tema.py            the color theme of the new figures
+  plot_stacking.py   the picture of the two stacking levels
+  pycaret_compare.py PyCaret compare_models() on the same folds (own Python 3.11 env)
+  tabular_fm.py      TabICLv2 from Hugging Face on the SVR features
+  igtd_cnn.py        IGTD images + EfficientNetV2B0 from Keras Applications
+  config.py          all training numbers of dl.py, rnn.py and bst.py
+  reproducibility.py set_all_seeds()
+  seed_check.py      the same seed in two separate processes
 scripts/
   download_data.py   fetches the datasets from GroupLens
 results/
@@ -139,6 +152,12 @@ python3 all_regressors.py                 # needs base_preds.py on the 5 folds f
 python3 save_dl_preds.py mlsmall kfold 0  # then dl_average.py, after rnn.py and bst.py with 3 seeds
 python3 dl_average.py
 python3 plot_20m_bars.py
+python3 plot_stacking.py
+python3 tabular_fm.py 20000               # needs a GPU, about 30 s per fold on a T4
+KERAS_BACKEND=torch python3 igtd_cnn.py   # 13 to 21 minutes per fold on a T4
+python3 seed_check.py                     # a few minutes
+# in the Python 3.11 env of requirements-pycaret.txt, about 45 minutes on a laptop:
+OMP_NUM_THREADS=1 python3 pycaret_compare.py
 ```
 
 On 20M we ran only `random` and `temporal`. On a laptop `base_preds.py` takes about 1.5 hours per split (mostly the 50 × 50 co-clustering), `stack.py` about 30 minutes and `dl.py` about 20 minutes. One transformer run takes 3 to 14 hours on a GPU.
@@ -149,9 +168,11 @@ Replace `mlsmall` with `ml100k` or `ml20m` for the other datasets. Runs on 20M a
 
 **Data versions.** The results use MovieLens latest-small as of September 2018 (100,836 ratings; `ratings.csv` md5 `325a6f09399d1c45671f187505e1a100`). GroupLens updates this dataset occasionally; `download_data.py` prints the md5 for comparison. The 20M results were produced with the Kaggle copy (`grouplens/movielens-20m-dataset`); the loader also reads the GroupLens zip.
 
-**Environment.** Python 3.13, NumPy 2.3.4, SciPy 1.17.1, pandas 3.0.3, scikit-learn 1.8.0, Surprise 1.1.5, numba 0.67.0, matplotlib 3.11.2, XGBoost 3.4.1, CatBoost 1.2.10, PyTorch 2.14.0, Transformers 5.20.1. Seed 42 everywhere (the transformers also 43 and 44). Deep learning and transformer runs were made on an Apple M2 GPU. Two 20M transformer runs (HF BERT random, own transformer temporal) and the four 20M GRU and LSTM runs were made on a Colab GPU with the same code and the same split fingerprints. GPU runs are not fully deterministic, so the same seed can differ in the third decimal.
+**Environment.** Python 3.13, NumPy 2.3.4, SciPy 1.17.1, pandas 3.0.3, scikit-learn 1.8.0, Surprise 1.1.5, numba 0.67.0, matplotlib 3.11.2, XGBoost 3.4.1, CatBoost 1.2.10, PyTorch 2.14.0, Transformers 5.20.1. Seed 42 everywhere (the transformers also 43 and 44). Deep learning and transformer runs were made on an Apple M2 GPU. TabICLv2 and the IGTD CNN ran on a Colab T4 GPU (Python 3.13, PyTorch 2.14.1, Keras 3.13.2, tabicl 2.2.0 on the Mac). PyCaret ran in its own environment (Python 3.11, PyCaret 3.3.2, scikit-learn 1.4.2). Two 20M transformer runs (HF BERT random, own transformer temporal) and the four 20M GRU and LSTM runs were made on a Colab GPU with the same code and the same split fingerprints. GPU runs are not fully deterministic, so the same seed can differ in the third decimal.
 
 ## More figures
+
+![Stacking](results/figures/stacking.png)
 
 ![Data maps](results/figures/viz_methods.png)
 
@@ -190,7 +211,7 @@ Replace `mlsmall` with `ml100k` or `ml20m` for the other datasets. Runs on 20M a
 
 ## Limitations
 
-The full 81-cell grid was not run on 20M (K = L only). On 20M the steps after the single models were run on random and temporal 80/20 only, with one seed, and the HF BERT transformer on temporal 80/20 was not run. The settings of the SVR, the ensembles, the networks and the transformers were fixed by hand and not tuned. Deep learning uses one seed, small networks and at most 40 epochs. C6 with shrinkage was run on 20M at only two sizes and two values of λ, on one split. The data maps use all ratings, not only the train part, but the silhouette scores with train ratings only give the same number of groups. The deep learning average was run on the two small datasets only, because the 20M predictions of all seven models are not saved in one place. The "best configuration" values of the single-model study are selected on test results, so they are slightly optimistic for every model family.
+The full 81-cell grid was not run on 20M (K = L only). On 20M the steps after the single models were run on random and temporal 80/20 only, with one seed, and the HF BERT transformer on temporal 80/20 was not run. The settings of the SVR, the ensembles, the networks and the transformers were fixed by hand and not tuned. Deep learning uses one seed, small networks and at most 40 epochs. C6 with shrinkage was run on 20M at only two sizes and two values of λ, on one split. The data maps use all ratings, not only the train part, but the silhouette scores with train ratings only give the same number of groups. TabICLv2, the IGTD CNN and PyCaret were run on the two small datasets only, and TabICLv2 saw only a quarter of the train rows. The deep learning average was run on the two small datasets only, because the 20M predictions of all seven models are not saved in one place. The "best configuration" values of the single-model study are selected on test results, so they are slightly optimistic for every model family.
 
 ## References
 
@@ -206,6 +227,7 @@ The full 81-cell grid was not run on 20M (K = L only). On 20M the steps after th
 - Drucker, H. (1997). Improving regressors using boosting techniques. *ICML*.
 - Drucker, H., Burges, C. J. C., Kaufman, L., Smola, A., Vapnik, V. (1997). Support vector regression machines. *NIPS* 9.
 - Fan, R.-E., Chang, K.-W., Hsieh, C.-J., Wang, X.-R., Lin, C.-J. (2008). LIBLINEAR: A library for large linear classification. *JMLR* 9.
+- Ali, M. (2020). PyCaret: An open source, low-code machine learning library in Python. https://www.pycaret.org
 - Ferrari Dacrema, M., Cremonesi, P., Jannach, D. (2019). Are we really making much progress? A worrying analysis of recent neural recommendation approaches. *ACM RecSys*.
 - Freund, Y., Schapire, R. E. (1997). A decision-theoretic generalization of on-line learning and an application to boosting. *Journal of Computer and System Sciences* 55(1).
 - George, T., Merugu, S. (2005). A scalable collaborative filtering framework based on co-clustering. *IEEE ICDM*.
@@ -213,11 +235,14 @@ The full 81-cell grid was not run on 20M (K = L only). On 20M the steps after th
 - Hochreiter, S., Schmidhuber, J. (1997). Long short-term memory. *Neural Computation* 9(8).
 - Khan, H. U., Naz, A., Alarfaj, F. K., Almusallam, N. (2025). A transformer-based architecture for collaborative filtering modeling in personalized recommender systems. *Scientific Reports* 15, 24503.
 - Prokhorenkova, L., Gusev, G., Vorobev, A., Dorogush, A. V., Gulin, A. (2018). CatBoost: Unbiased boosting with categorical features. *NeurIPS*.
+- Qu et al. (2026). TabICLv2. *ICML*, PMLR 306. arXiv:2602.11139, https://github.com/soda-inria/tabicl
 - Rahimi, A., Recht, B. (2007). Random features for large-scale kernel machines. *NIPS* 20.
 - Williams, C. K. I., Seeger, M. (2001). Using the Nyström method to speed up kernel machines. *NIPS* 13.
 - Wolf, T., et al. (2020). Transformers: State-of-the-art natural language processing. *EMNLP: System Demonstrations*.
 - Wolpert, D. H. (1992). Stacked generalization. *Neural Networks* 5(2).
+- Tan, M., Le, Q. (2021). EfficientNetV2: Smaller models and faster training. *ICML*.
 - Yang, T., Li, Y.-F., Mahdavi, M., Jin, R., Zhou, Z.-H. (2012). Nyström method vs random Fourier features: A theoretical and empirical comparison. *NIPS* 25.
+- Zhu, Y., et al. (2021). Converting tabular data into images for deep learning with convolutional neural networks. *Scientific Reports* 11, 11325.
 
 ## Acknowledgements
 

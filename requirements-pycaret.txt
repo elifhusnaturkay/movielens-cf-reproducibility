@@ -1,0 +1,8 @@
+# PyCaret needs Python < 3.12, so pycaret_compare.py runs in its own environment:
+#   conda create -n pycaret python=3.11 && conda activate pycaret
+#   pip install -r requirements-pycaret.txt
+pycaret==3.3.2
+scikit-learn==1.4.2
+catboost==1.2.10
+lightgbm==4.7.0
+xgboost==3.2.0

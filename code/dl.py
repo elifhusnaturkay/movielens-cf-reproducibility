@@ -31,6 +31,8 @@ from torch import nn
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RESULTS = os.path.join(HERE, "..", "results")
+import config as C  # noqa: E402
+from reproducibility import set_all_seeds  # noqa: E402
 DEV = "mps" if torch.backends.mps.is_available() else "cpu"
 DIM = 32
 
@@ -102,9 +104,9 @@ def predict(net, u, i, x):
 
 
 def train_one(kind, d):
-    batch = 8192 if len(d["train"]) > 1_000_000 else 1024   # 20M: bigger batches
-    torch.manual_seed(42)
-    rng = np.random.default_rng(42)
+    batch = C.BATCH_DL[len(d["train"]) > C.BIG]               # 20M: bigger batches
+    set_all_seeds(C.SEED)
+    rng = np.random.default_rng(C.SEED)
     tr, te = d["train"], d["test"]
     users, items = np.unique(tr[:, 0]), np.unique(tr[:, 1])
     Xtr, Xte = d["X_train"], d["X_test"]
@@ -117,18 +119,18 @@ def train_one(kind, d):
                 torch.tensor(X, dtype=torch.float32, device=DEV))
 
     order = rng.permutation(len(tr))
-    cut = int(len(tr) * 0.9)
+    cut = int(len(tr) * (1 - C.VAL_FRACTION))
     fit, val = order[:cut], order[cut:]
     U, I, X = tensors(tr, Xtr)
     Y = torch.tensor(tr[:, 2], dtype=torch.float32, device=DEV)
     Ut, It, XT = tensors(te, Xte)
 
     net = Net(kind, len(users), len(items), Xtr.shape[1], float(tr[fit, 2].mean())).to(DEV)
-    opt = torch.optim.Adam(net.parameters(), lr=1e-3, weight_decay=1e-5)
+    opt = torch.optim.Adam(net.parameters(), lr=C.LR, weight_decay=C.WEIGHT_DECAY)
     best, best_state, wait, epochs = 9.0, None, 0, 0
     fit_t = torch.tensor(fit, device=DEV)
     y_val = tr[val, 2]
-    for epoch in range(40):
+    for epoch in range(C.EPOCHS_DL):
         net.train()
         perm = fit_t[torch.randperm(len(fit_t), device=DEV)]
         for s in range(0, len(perm), batch):
@@ -139,12 +141,12 @@ def train_one(kind, d):
             opt.step()
         v = torch.tensor(val, device=DEV)
         score = rmse(predict(net, U[v], I[v], X[v]), y_val)
-        if score < best - 1e-4:
+        if score < best - C.MIN_DELTA:
             best, wait, epochs = score, 0, epoch + 1
             best_state = {k: t.clone() for k, t in net.state_dict().items()}
         else:
             wait += 1
-            if wait >= 3:
+            if wait >= C.PATIENCE:
                 break
     net.load_state_dict(best_state)
     lo, hi = d["scale"]

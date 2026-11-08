@@ -1,0 +1,10 @@
+{"dataset": "mlsmall", "fold": 0, "model": "TabICLv2", "context": 20000, "fingerprint": "21f0c082ef31", "device": "Tesla T4", "rmse": 0.8399368462511113, "mae": 0.6448736845034306, "seconds": 30.8}
+{"dataset": "mlsmall", "fold": 1, "model": "TabICLv2", "context": 20000, "fingerprint": "f1a3f778655a", "device": "Tesla T4", "rmse": 0.8349031127365277, "mae": 0.6403162291456996, "seconds": 26.1}
+{"dataset": "mlsmall", "fold": 2, "model": "TabICLv2", "context": 20000, "fingerprint": "fe1e5d4629b4", "device": "Tesla T4", "rmse": 0.8443545983045826, "mae": 0.6483137250691394, "seconds": 27.4}
+{"dataset": "mlsmall", "fold": 3, "model": "TabICLv2", "context": 20000, "fingerprint": "ecb488debe4e", "device": "Tesla T4", "rmse": 0.8538254075217968, "mae": 0.6597986999451567, "seconds": 28.1}
+{"dataset": "mlsmall", "fold": 4, "model": "TabICLv2", "context": 20000, "fingerprint": "18b56fcc23ca", "device": "Tesla T4", "rmse": 0.8437026621020514, "mae": 0.6469570273281225, "seconds": 26.7}
+{"dataset": "ml100k", "fold": 0, "model": "TabICLv2", "context": 20000, "fingerprint": "3853c40bc9fc", "device": "Tesla T4", "rmse": 0.931746480611021, "mae": 0.7348582727789879, "seconds": 26.2}
+{"dataset": "ml100k", "fold": 1, "model": "TabICLv2", "context": 20000, "fingerprint": "970cdb26f775", "device": "Tesla T4", "rmse": 0.9254375301996441, "mae": 0.7283096157371998, "seconds": 26.6}
+{"dataset": "ml100k", "fold": 2, "model": "TabICLv2", "context": 20000, "fingerprint": "e3c1e47e4409", "device": "Tesla T4", "rmse": 0.9345617094497258, "mae": 0.7396356385588646, "seconds": 26.4}
+{"dataset": "ml100k", "fold": 3, "model": "TabICLv2", "context": 20000, "fingerprint": "2712bb4931b3", "device": "Tesla T4", "rmse": 0.9346869978892609, "mae": 0.7391848029315472, "seconds": 26.3}
+{"dataset": "ml100k", "fold": 4, "model": "TabICLv2", "context": 20000, "fingerprint": "83f1413e4316", "device": "Tesla T4", "rmse": 0.9405917651444281, "mae": 0.7428349658370018, "seconds": 26.4}

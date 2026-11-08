@@ -34,6 +34,8 @@ from bst import DATASETS, L, D, get_split, histories, index, rmse, mae
 
 RESULTS = os.path.join(HERE, "..", "results")
 PREDS = os.path.join(RESULTS, "preds")
+import config as C  # noqa: E402
+from reproducibility import set_all_seeds  # noqa: E402
 os.makedirs(PREDS, exist_ok=True)
 DEV = ("cuda" if torch.cuda.is_available()
        else "mps" if torch.backends.mps.is_available() else "cpu")
@@ -107,7 +109,7 @@ def main():
         t = lambda a: torch.tensor(a, device=DEV)            # noqa: E731
         return (t(index(rows[:, 0], users)), t(hi_), t(hr_), t(index(rows[:, 1], items)))
 
-    torch.manual_seed(seed)
+    set_all_seeds(seed)
     rng = np.random.default_rng(seed)
     if protocol == "temporal":
         # validation = newest 10% of each user
@@ -116,12 +118,12 @@ def main():
         starts = np.r_[0, np.flatnonzero(np.diff(su)) + 1]
         counts = np.diff(np.r_[starts, len(su)])
         rank = np.arange(len(su)) - np.repeat(starts, counts)
-        is_val = rank >= np.repeat((counts * 0.9).astype(int), counts)
+        is_val = rank >= np.repeat((counts * (1 - C.VAL_FRACTION)).astype(int), counts)
         order = np.r_[rng.permutation(by_time[~is_val]), by_time[is_val]]
         cut = int((~is_val).sum())
     else:
         order = rng.permutation(len(train))
-        cut = int(len(train) * 0.9)
+        cut = int(len(train) * (1 - C.VAL_FRACTION))
     fit, val = torch.tensor(order[:cut], device=DEV), torch.tensor(order[cut:], device=DEV)
     TR = tensors(train, Htr)
     TE = tensors(test, Hte)
@@ -129,7 +131,7 @@ def main():
 
     net = Net(kind, len(users), len(items), len(levels), float(train[order[:cut], 2].mean()))
     net = net.to(DEV)
-    opt = torch.optim.Adam(net.parameters(), lr=1e-3, weight_decay=1e-5)
+    opt = torch.optim.Adam(net.parameters(), lr=C.LR, weight_decay=C.WEIGHT_DECAY)
 
     def predict(T, idx=None):
         net.eval()
@@ -141,10 +143,10 @@ def main():
                 out.append(net(*(x[b] for x in T)).cpu().numpy())
         return np.concatenate(out)
 
-    batch = 2048 if len(train) > 1_000_000 else 256          # 20M: bigger batches
+    batch = C.BATCH_SEQ[len(train) > C.BIG]                 # 20M: bigger batches
     t0 = time.time()
     best, best_state, wait, best_epoch = 9.0, None, 0, 0
-    for epoch in range(30):
+    for epoch in range(C.EPOCHS_SEQ):
         net.train()
         perm = fit[torch.randperm(len(fit), device=DEV)]
         for s in range(0, len(perm), batch):
@@ -154,12 +156,12 @@ def main():
             loss.backward()
             opt.step()
         score = rmse(np.clip(predict(TR, val), lo, hi), train[val.cpu().numpy(), 2])
-        if score < best - 1e-4:
+        if score < best - C.MIN_DELTA:
             best, wait, best_epoch = score, 0, epoch + 1
             best_state = {k: v.clone() for k, v in net.state_dict().items()}
         else:
             wait += 1
-            if wait >= 3:
+            if wait >= C.PATIENCE:
                 break
     net.load_state_dict(best_state)
     pred = np.clip(predict(TE), lo, hi)
